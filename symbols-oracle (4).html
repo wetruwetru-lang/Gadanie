@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЗНАКИ.PRO — И-Цзин, Футарк, Славянские руны</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0A0F;
+  --bg-panel:#131218;
+  --bg-panel-2:#1B1A22;
+  --border:#2A2833;
+  --border-soft:#201F27;
+  --accent:#C9A24A;
+  --accent-bright:#E7C876;
+  --accent-glow:rgba(231,200,118,.30);
+  --text-1:#EFEAE0;
+  --text-2:#A79E8E;
+  --text-3:#6C6558;
+  --ok:#5FD4A0;
+  --err:#FF6B7A;
+  --dim:#1B1922;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:radial-gradient(ellipse at 50% -10%, #17151F, var(--bg) 60%);
+  color:var(--text-1);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.disp{font-family:'Unbounded',sans-serif}
+.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px 90px}
+a{color:var(--accent-bright)}
+
+/* ---------- NAV ---------- */
+.topbar{position:sticky;top:0;z-index:60;background:rgba(10,10,15,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--border-soft)}
+.topbar-in{max-width:960px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Unbounded';font-weight:600;font-size:16px;letter-spacing:.02em}
+.logo .rune{width:16px;height:16px;background:var(--accent-bright);clip-path:polygon(50% 0,100% 100%,0 100%);box-shadow:0 0 10px var(--accent-glow)}
+.systab{display:flex;gap:4px;background:var(--bg-panel);border:1px solid var(--border-soft);border-radius:10px;padding:4px;flex-wrap:wrap}
+.systab button{border:none;background:transparent;color:var(--text-2);font-family:'Inter';font-weight:500;font-size:13px;padding:8px 14px;border-radius:7px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px}
+.systab button:hover{color:var(--text-1)}
+.systab button.active{background:var(--accent);color:#1A1408}
+.systab button .g{font-size:15px}
+
+/* ---------- HERO ---------- */
+.hero{padding:52px 0 26px;text-align:center}
+.eyebrow{display:inline-block;font-family:'JetBrains Mono';font-size:12px;color:var(--accent-bright);letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border);padding:5px 12px;border-radius:99px;margin-bottom:18px}
+.hero h1{font-size:34px;line-height:1.15;margin:0 0 12px;font-weight:600}
+.hero h1 .g1{color:var(--accent-bright);font-size:1.1em;margin-right:8px}
+.hero p{color:var(--text-2);font-size:15px;max-width:560px;margin:0 auto;line-height:1.65}
+.hero .note{font-size:12.5px;color:var(--text-3);max-width:560px;margin:10px auto 0;font-style:italic;line-height:1.5}
+
+/* ---------- SUBTABS ---------- */
+.subtabs{display:flex;gap:4px;background:var(--bg-panel);border:1px solid var(--border-soft);border-radius:10px;padding:4px;margin:30px 0 26px;flex-wrap:wrap;justify-content:center}
+.subtab-btn{border:none;background:transparent;color:var(--text-2);font-family:'Inter';font-weight:500;font-size:13.5px;padding:9px 18px;border-radius:7px;cursor:pointer;transition:.15s}
+.subtab-btn:hover{color:var(--text-1)}
+.subtab-btn.active{background:var(--accent);color:#1A1408}
+
+.view{display:none}
+.view.active{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.section-title{font-size:20px;font-weight:600;margin:0 0 6px}
+.section-sub{color:var(--text-2);font-size:13.5px;margin:0 0 20px;line-height:1.6}
+
+.btn{font-family:'Inter';font-weight:600;font-size:14px;border-radius:10px;padding:12px 22px;cursor:pointer;border:1px solid var(--border);background:var(--bg-panel);color:var(--text-1);transition:.15s}
+.btn:hover{background:var(--bg-panel-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#1A1408}
+.btn.primary:hover{background:var(--accent-bright)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.small{padding:8px 14px;font-size:13px;border-radius:8px}
+.btn.ghost{background:transparent}
+
+/* ---------- CATEGORY CHIPS ---------- */
+.cat-chips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
+.cat-chip{border:1px solid var(--border);background:var(--bg-panel);color:var(--text-2);font-family:'Inter';font-size:12.5px;font-weight:500;padding:8px 14px;border-radius:20px;cursor:pointer;transition:.15s;white-space:nowrap}
+.cat-chip:hover{border-color:var(--accent)}
+.cat-chip.active{background:var(--accent);border-color:var(--accent);color:#1A1408}
+
+/* ---------- LIBRARY GRID ---------- */
+.lib-toggle{display:flex;gap:4px;background:var(--bg-panel);border:1px solid var(--border-soft);border-radius:10px;padding:4px;margin-bottom:22px;width:fit-content}
+.lib-toggle button{border:none;background:transparent;color:var(--text-2);font-size:13px;font-weight:500;padding:8px 16px;border-radius:7px;cursor:pointer;transition:.15s}
+.lib-toggle button.active{background:var(--accent);color:#1A1408}
+
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.lib-grid.hexmode{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
+.lib-item{background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;padding:16px 8px 12px;text-align:center;cursor:pointer;transition:.15s}
+.lib-item:hover{border-color:var(--accent);transform:translateY(-2px);background:var(--bg-panel-2)}
+.lib-glyph{font-size:30px;line-height:1;height:38px;display:flex;align-items:center;justify-content:center;color:var(--accent-bright)}
+.lib-item .lname{font-size:12px;margin-top:8px;color:var(--text-1);line-height:1.25}
+.lib-item .lkey{font-size:10.5px;color:var(--text-3);margin-top:2px;font-family:'JetBrains Mono'}
+.lib-item .lnum{font-family:'JetBrains Mono';font-size:9.5px;color:var(--accent-bright);letter-spacing:.5px}
+
+.medallion{width:44px;height:44px;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto;font-family:'Unbounded';font-weight:600;font-size:17px;color:var(--accent-bright);background:radial-gradient(circle at 35% 30%, rgba(231,200,118,.12), transparent)}
+
+.hex-render{display:flex;flex-direction:column;gap:6px;width:96px;margin:0 auto}
+.hex-render.small{width:52px;gap:3px}
+.hex-render.small .bar{height:4px}
+.hex-render.small .hexline{height:4px}
+
+/* ---------- CARD / MODAL ---------- */
+.card{background:var(--bg-panel);border:1px solid var(--border);border-radius:16px;padding:24px 22px}
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,6,9,.7);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;z-index:80}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--bg-panel);border:1px solid var(--border);border-radius:16px;max-width:520px;width:100%;padding:28px 24px;position:relative;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:var(--text-2);cursor:pointer}
+.modal-close:hover{color:var(--accent-bright)}
+.modal .mglyph{font-size:46px;text-align:center;color:var(--accent-bright);margin-bottom:6px}
+.modal h3{text-align:center;font-size:20px;margin:0 0 2px}
+.modal .msub{text-align:center;color:var(--text-3);font-size:12.5px;font-family:'JetBrains Mono';margin-bottom:16px}
+.modal p{color:var(--text-2);font-size:14px;line-height:1.7;margin:0 0 8px}
+.modal .keyline{text-align:center;color:var(--accent-bright);font-size:14px;font-weight:600;margin-bottom:14px}
+.modal .cat-block{background:var(--bg-panel-2);border:1px solid var(--border-soft);border-radius:10px;padding:12px 14px;margin-top:10px}
+.modal .cat-block .lbl{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--accent-bright);display:block;margin-bottom:4px}
+.modal .cat-block p{margin:0;font-size:13.5px}
+
+/* ---------- DIVINATION ---------- */
+.divine-stage{text-align:center}
+.spread-choice{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
+.spread-choice button.active{background:var(--accent);border-color:var(--accent);color:#1A1408}
+.draw-result{display:grid;gap:16px;margin-top:24px}
+.draw-result.cols3{grid-template-columns:1fr}
+@media(min-width:640px){.draw-result.cols3{grid-template-columns:repeat(3,1fr)}}
+.draw-card{background:var(--bg-panel-2);border:1px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center}
+.draw-pos{font-family:'JetBrains Mono';font-size:11px;letter-spacing:1px;color:var(--text-3);text-transform:uppercase;margin-bottom:10px}
+.draw-glyph{font-size:38px;color:var(--accent-bright);margin-bottom:8px}
+.draw-name{font-weight:600;font-size:15px;margin-bottom:4px}
+.draw-rev{font-size:11px;color:var(--err);font-family:'JetBrains Mono';margin-bottom:8px}
+.draw-key{font-size:13px;color:var(--text-2);line-height:1.55;text-align:left}
+.draw-cat{font-size:12.5px;color:var(--accent-bright);line-height:1.55;text-align:left;margin-top:8px;border-top:1px solid var(--border);padding-top:8px}
+
+.coins{display:flex;justify-content:center;gap:16px;margin:6px 0 20px;perspective:600px}
+.coin{width:42px;height:42px;border-radius:50%;position:relative;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.4,.2,.2,1)}
+.coin .face{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;font-family:'Unbounded',serif;font-size:16px;border:2px solid var(--border)}
+.coin .face.yang{background:radial-gradient(circle at 35% 30%,#3a3320,var(--accent));color:#1A1408}
+.coin .face.yin{background:radial-gradient(circle at 35% 30%,#2a2833,#1B1A22);color:var(--text-2);transform:rotateY(180deg)}
+.coin.flipped{transform:rotateY(720deg)}
+.coin.tails .face.yin{transform:rotateY(0)}
+.coin.tails .face.yang{transform:rotateY(180deg)}
+
+.building-hex{display:flex;flex-direction:column-reverse;align-items:center;gap:7px;margin:16px auto 4px;width:170px}
+.lineplace{width:170px;height:12px;opacity:.15}
+.lineplace.filled{opacity:1}
+.hexline{width:100%;height:12px;display:flex;align-items:center;justify-content:center;position:relative}
+.bar{height:10px;background:var(--text-2);border-radius:1px}
+.hexline.yang .bar{width:100%}
+.hexline.yin .bar{width:40%}
+.hexline.changing .bar{background:var(--accent-bright);box-shadow:0 0 8px var(--accent-glow)}
+.hexline .marker{position:absolute;right:-22px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--accent-bright);font-family:'JetBrains Mono';font-weight:700}
+.cast-status{font-size:12.5px;color:var(--text-3);margin-top:8px;font-family:'JetBrains Mono'}
+.result-arrow{font-size:22px;color:var(--accent);text-align:center;margin:14px 0}
+.method-note{font-size:12px;color:var(--text-3);text-align:center;margin-top:16px;line-height:1.55;max-width:480px;margin-left:auto;margin-right:auto}
+
+/* ---------- QUIZ ---------- */
+.quiz-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.qstat{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:10px 16px;flex:1;min-width:90px;text-align:center}
+.qstat .v{font-family:'JetBrains Mono';font-weight:700;font-size:19px;color:var(--accent-bright)}
+.qstat .l{font-size:10.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.quiz-card{text-align:center}
+.quiz-glyph{font-size:52px;color:var(--accent-bright);margin:10px 0 18px}
+.quiz-question{font-size:14px;color:var(--text-2);margin-bottom:18px}
+.quiz-opts{display:grid;grid-template-columns:1fr;gap:10px;max-width:420px;margin:0 auto}
+@media(min-width:520px){.quiz-opts{grid-template-columns:1fr 1fr}}
+.qopt{background:var(--bg-panel-2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--text-1);cursor:pointer;text-align:left;transition:.15s}
+.qopt:hover{border-color:var(--accent)}
+.qopt.correct{background:rgba(95,212,160,.12);border-color:var(--ok);color:var(--ok)}
+.qopt.wrong{background:rgba(255,107,122,.12);border-color:var(--err);color:var(--err)}
+.qopt:disabled{cursor:default}
+.feedback{min-height:20px;font-size:13px;margin-top:14px}
+.feedback.ok{color:var(--ok)}
+.feedback.err{color:var(--err)}
+
+/* ---------- TALISMAN ---------- */
+.pick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-bottom:20px}
+.pick-item{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:10px 4px;text-align:center;cursor:pointer;transition:.15s}
+.pick-item .g{font-size:22px;color:var(--text-2)}
+.pick-item .n{font-size:10.5px;color:var(--text-3);margin-top:4px}
+.pick-item.sel{border-color:var(--accent);background:rgba(201,162,74,.1)}
+.pick-item.sel .g{color:var(--accent-bright)}
+.pick-item.sel .n{color:var(--accent-bright)}
+.trigram-slot-row{margin-bottom:18px}
+.slot-title{font-family:'JetBrains Mono';font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pick-grid.inner{margin-bottom:0}
+.hex-render.quiz{width:76px;gap:6px}
+.hex-render.quiz .bar{height:6px}
+.hex-render.quiz .hexline{height:6px}
+
+.talisman-stage{display:flex;flex-direction:column;align-items:center;gap:16px;margin:10px 0 22px}
+.combo-box{width:180px;height:180px;position:relative;border:1px dashed var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;background:var(--bg-panel)}
+.combo-glyph{position:absolute;font-family:'Unbounded';font-weight:700;top:50%;left:50%;color:var(--accent-bright);transform-origin:center;text-shadow:0 0 16px var(--accent-glow)}
+.talisman-name-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.talisman-name-row input{font-family:'Inter';font-size:14px;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg-panel);color:var(--text-1);min-width:220px}
+.chosen-list{font-size:13px;color:var(--text-2);text-align:left;line-height:1.75;max-width:520px;margin:0 auto}
+.chosen-list b{color:var(--accent-bright)}
+.chosen-list .cline{margin-bottom:6px}
+
+.saved-list{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+.saved-item{background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.saved-item .sg{font-size:20px;color:var(--accent-bright);letter-spacing:2px}
+.saved-item .sn{font-weight:600;font-size:14px}
+.saved-item .sd{font-size:11px;color:var(--text-3);font-family:'JetBrains Mono'}
+.saved-item button{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px}
+.saved-item button:hover{color:var(--err)}
+.empty-note{color:var(--text-3);font-size:13px;text-align:center;padding:20px;font-style:italic}
+
+footer{text-align:center;margin-top:56px;font-size:12px;color:var(--text-3);font-family:'JetBrains Mono';line-height:1.7}
+.donate-card{margin-top:44px}
+.donate-card h3{margin:0 0 6px;font-size:16px;font-weight:600}
+.donate-card p{color:var(--text-2);font-size:13px;margin:0 0 16px;line-height:1.6}
+.donate-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--border-soft)}
+.donate-row:first-of-type{border-top:none;padding-top:0}
+.donate-label{font-family:'JetBrains Mono';font-size:12px;color:var(--accent-bright);min-width:120px}
+.donate-addr{flex:1;min-width:180px;font-family:'JetBrains Mono';font-size:12px;color:var(--text-1);background:var(--bg);padding:7px 10px;border-radius:6px;border:1px solid var(--border-soft);word-break:break-all}
+@media(max-width:520px){.donate-label{min-width:100%}.donate-addr{font-size:11px}}
+@media(max-width:520px){.wrap{padding:0 14px 70px}.card{padding:18px 16px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="logo"><span class="rune"></span>ЗНАКИ.PRO</div>
+    <div class="systab" id="sysTabs"></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="eyebrow">Учение · Гадание · Талисманы</div>
+    <h1 id="heroTitle"></h1>
+    <p id="heroSub"></p>
+    <p class="note" id="heroNote"></p>
+  </div>
+
+  <div class="subtabs" id="subTabs">
+    <button class="subtab-btn" data-tab="library">Библиотека</button>
+    <button class="subtab-btn" data-tab="divine">Гадание</button>
+    <button class="subtab-btn" data-tab="quiz">Тест</button>
+    <button class="subtab-btn" data-tab="talisman">Талисман</button>
+  </div>
+
+  <!-- LIBRARY -->
+  <section class="view" id="view-library">
+    <div class="section-title">Библиотека знаков</div>
+    <p class="section-sub" id="libSub">Нажмите на знак, чтобы увидеть подробное толкование по категориям.</p>
+    <div class="lib-toggle" id="libToggle" style="display:none;">
+      <button data-mode="symbols" class="active">Триграммы</button>
+      <button data-mode="hex">Все 64 гексаграммы</button>
+    </div>
+    <div class="lib-grid" id="libGrid"></div>
+  </section>
+
+  <!-- DIVINE -->
+  <section class="view" id="view-divine">
+    <div class="section-title">Гадание</div>
+    <p class="section-sub" id="divineSub"></p>
+    <div class="cat-chips" id="divineCatChips"></div>
+    <div class="card divine-stage" id="divineStage"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="view" id="view-quiz">
+    <div class="section-title">Тест на знание символов</div>
+    <p class="section-sub" id="quizSub">Выберите верное значение знака. Прогресс сохраняется автоматически.</p>
+    <div class="lib-toggle" id="quizModeToggle" style="display:none;"></div>
+    <div class="cat-chips" id="quizLevelChips"></div>
+    <div class="quiz-stats">
+      <div class="qstat"><div class="v" id="qs-solved">0</div><div class="l">Пройдено</div></div>
+      <div class="qstat"><div class="v" id="qs-acc">0%</div><div class="l">Точность</div></div>
+      <div class="qstat"><div class="v" id="qs-streak">0</div><div class="l">Серия</div></div>
+      <div class="qstat"><div class="v" id="qs-best">0</div><div class="l">Рекорд</div></div>
+    </div>
+    <div class="card quiz-card" id="quizCard"></div>
+  </section>
+
+  <!-- TALISMAN -->
+  <section class="view" id="view-talisman">
+    <div class="section-title">Создание талисмана / формулы</div>
+    <p class="section-sub" id="talismanSub"></p>
+    <div class="cat-chips" id="talismanCatChips"></div>
+    <div class="card">
+      <div class="pick-grid" id="pickGrid"></div>
+      <div class="talisman-stage">
+        <div class="combo-box" id="comboBox"></div>
+        <div class="chosen-list" id="chosenList"></div>
+        <div class="talisman-name-row">
+          <input type="text" id="talismanNameInput" placeholder="Название талисмана (например, «На удачу в делах»)">
+          <button class="btn primary" id="saveTalismanBtn">Сохранить</button>
+          <button class="btn ghost" id="clearPickBtn">Очистить выбор</button>
+        </div>
+      </div>
+      <div class="saved-list" id="savedList"></div>
+    </div>
+  </section>
+
+  <div class="card donate-card">
+    <h3>Поддержать проект</h3>
+    <p>Если сайт оказался полезен — можно поддержать разработку донатом.</p>
+    <div class="donate-row">
+      <span class="donate-label">USDT (TRC20)</span>
+      <code class="donate-addr">TVz7UzXv1Kcqf5uKWgHuzCpaHhd6Lvfvv9</code>
+      <button class="btn small" onclick="copyAddr(this,'TVz7UzXv1Kcqf5uKWgHuzCpaHhd6Lvfvv9')">Копировать</button>
+    </div>
+    <div class="donate-row">
+      <span class="donate-label">XLM</span>
+      <code class="donate-addr">GAQX5OJRPHUY62MDHOHC7U4XBXMBDQFWNB5XN67BRLNUNJ3TOGAUFU2B</code>
+      <button class="btn small" onclick="copyAddr(this,'GAQX5OJRPHUY62MDHOHC7U4XBXMBDQFWNB5XN67BRLNUNJ3TOGAUFU2B')">Копировать</button>
+    </div>
+    <div class="donate-row">
+      <span class="donate-label">DOGE</span>
+      <code class="donate-addr">DQMjjEAuebRrDxCicWhkb2jtUqj4HKdmDK</code>
+      <button class="btn small" onclick="copyAddr(this,'DQMjjEAuebRrDxCicWhkb2jtUqj4HKdmDK')">Копировать</button>
+    </div>
+    <div class="donate-row">
+      <span class="donate-label">SHIB (ERC20)</span>
+      <code class="donate-addr">0x50B0b1d72d007Fd0C692b2580cbA152011197CE7</code>
+      <button class="btn small" onclick="copyAddr(this,'0x50B0b1d72d007Fd0C692b2580cbA152011197CE7')">Копировать</button>
+    </div>
+  </div>
+
+  <footer>И-Цзин — по традиционной последовательности Вэнь-вана. Старший Футарк — историческая руническая система. Славянские руны (резы) — современная эзотерическая система символов без единого древнего первоисточника; приведена в популярной трактовке.<br>Толкования, включая разбор по категориям (любовь, удача, карьера, деньги, здоровье) — краткий авторский пересказ традиционных смыслов, для учебных и развлекательных целей.</footer>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   CATEGORIES
+   ========================================================================= */
+const CATEGORIES = [
+  {id:'love',   label:'Любовь',  acc:'любовь',   icon:'❤'},
+  {id:'luck',   label:'Удача',   acc:'удачу',    icon:'🍀'},
+  {id:'career', label:'Карьера', acc:'карьеру',  icon:'💼'},
+  {id:'money',  label:'Деньги',  acc:'деньги',   icon:'💰'},
+  {id:'health', label:'Здоровье',acc:'здоровье', icon:'🌿'}
+];
+function catById(id){ return CATEGORIES.find(c => c.id === id) || CATEGORIES[0]; }
+function divText(sym, catId){
+  const c = catById(catId);
+  const phrase = sym.cats && sym.cats[catId] ? sym.cats[catId] : sym.key;
+  return `Если знак выпал в раскладе на «${c.label}»: ${phrase}.`;
+}
+function talText(sym, catId){
+  const c = catById(catId);
+  const phrase = sym.cats && sym.cats[catId] ? sym.cats[catId] : sym.key;
+  return `В талисмане на ${c.acc}: ${phrase}.`;
+}
+
+/* =========================================================================
+   DATA
+   ========================================================================= */
+
+/* ---- I-CHING: 8 trigrams ---- */
+const ICHING_TRIGRAMS = [
+{id:'qian',glyph:'☰',bin:'111',cn:'乾',py:'цянь',ru:'Творчество',key:'Небо, отец, чистая творческая сила',
+ desc:'Три сплошные черты — чистый ян. Небо, творческое начало, отец в семье, металл. Движение без остановки, воля, инициатива, руководство.',
+ cats:{love:'уверенное лидерство в отношениях, инициатива в чувствах',luck:'удача благоволит смелым и решительным действиям',career:'время брать на себя руководство и ответственность',money:'доходы растут через собственную инициативу и труд',health:'запас сил велик, но избегайте переутомления от гонки'}},
+{id:'kun',glyph:'☷',bin:'000',cn:'坤',py:'кунь',ru:'Исполнение',key:'Земля, мать, восприимчивость',
+ desc:'Три прерывистые черты — чистая инь. Земля, покорность, восприимчивость, мать. Поддержка, терпение, способность вмещать и взращивать.',
+ cats:{love:'мягкость, забота и терпение укрепляют союз',luck:'удача приходит через покорность обстоятельствам, не спешите',career:'успех через поддержку команды, а не единоличный напор',money:'стабильный, но медленный рост через бережливость',health:'опора на отдых и заботу о теле, без перегрузок'}},
+{id:'zhen',glyph:'☳',bin:'001',cn:'震',py:'чжэнь',ru:'Потрясение',key:'Гром, старший сын, внезапный импульс',
+ desc:'Сплошная черта снизу, две прерывистые сверху. Гром, резкое движение, пробуждение, старший сын. Решительное начало, потрясение, толчок к действию.',
+ cats:{love:'резкое, будоражащее чувство или неожиданное признание',luck:'внезапный поворот судьбы, будьте готовы действовать быстро',career:'смелый первый шаг важнее, чем долгие раздумья',money:'резкие перемены в доходах, не пугайтесь встряски',health:'нервное напряжение, важно не позволить тревоге взять верх'}},
+{id:'kan',glyph:'☵',bin:'010',cn:'坎',py:'кань',ru:'Бездна',key:'Вода, средний сын, испытание',
+ desc:'Сплошная черта в середине между двумя прерывистыми. Вода, опасность, глубина, средний сын. Стойкость перед скрытой угрозой, погружение внутрь.',
+ cats:{love:'испытание чувств трудностями, глубина важнее лёгкости',luck:'полоса препятствий, но стойкость приведёт к выходу',career:'скрытые риски в делах, действуйте осторожно и вдумчиво',money:'опасность потерь, нужна осторожность и резерв',health:'истощение сил, стоит уделить внимание отдыху и сну'}},
+{id:'gen',glyph:'☶',bin:'100',cn:'艮',py:'гэнь',ru:'Неподвижность',key:'Гора, младший сын, покой',
+ desc:'Сплошная черта наверху, две прерывистые внизу. Гора, остановка, сосредоточенность, младший сын. Граница, время для размышления, устойчивость.',
+ cats:{love:'пауза в отношениях полезна для ясности чувств',luck:'время остановиться и не форсировать события',career:'лучше закрепить достигнутое, чем начинать новое',money:'воздержитесь от крупных трат и рискованных вложений',health:'нужен покой, снижение нагрузки, время для восстановления'}},
+{id:'xun',glyph:'☴',bin:'110',cn:'巽',py:'сюнь',ru:'Проникновение',key:'Ветер и дерево, старшая дочь',
+ desc:'Прерывистая черта снизу, две сплошные сверху. Ветер, дерево, мягкое проникновение, старшая дочь. Постепенное влияние, гибкость, распространение.',
+ cats:{love:'постепенное, мягкое сближение сильнее резких порывов',luck:'удача приходит незаметно, через постепенное влияние',career:'терпеливое, последовательное продвижение приносит плоды',money:'доход растёт понемногу через методичные усилия',health:'постепенное оздоровление через привычки, а не резкие меры'}},
+{id:'li',glyph:'☲',bin:'101',cn:'離',py:'ли',ru:'Сияние',key:'Огонь, средняя дочь, ясность',
+ desc:'Прерывистая черта в середине между двумя сплошными. Огонь, свет, ясность, средняя дочь. Прозрение, красота формы, зависимость света от опоры.',
+ cats:{love:'яркая, страстная связь, но берегитесь вспышек и выгорания',luck:'удача видна и ясна, момент для заметных действий',career:'признание и известность, но держите ясность цели',money:'быстрые доходы возможны, но и быстрые траты тоже',health:'воспаления и жар — следите за балансом, не перегорайте'}},
+{id:'dui',glyph:'☱',bin:'011',cn:'兌',py:'дуй',ru:'Радость',key:'Озеро, младшая дочь, открытость',
+ desc:'Прерывистая черта наверху, две сплошные внизу. Озеро, радость, открытость, младшая дочь. Удовольствие, общение, притяжение и обмен.',
+ cats:{love:'лёгкость общения, открытый разговор сближает сердца',luck:'радостная, лёгкая полоса, наслаждайтесь моментом',career:'успешные переговоры и приятное сотрудничество',money:'доход через общение, сделки и открытый обмен',health:'хорошее настроение поддерживает и тело — берегите его через радость'}}
+];
+
+/* ---- I-CHING: 64 hexagrams (King Wen order). bin: index0=top line...index5=bottom line ---- */
+const ICHING_HEX = [
+{n:1,cn:'乾',py:'цянь',ru:'Творчество',bin:'111111',fate:'Изначальный успех; благоприятна стойкость.',image:'Благородный муж черпает силы в неустанном движении, как небо, и совершенствует себя без остановки.'},
+{n:2,cn:'坤',py:'кунь',ru:'Исполнение',bin:'000000',fate:'Изначальный успех; польза в стойкости, подобной кобылице, что покорно следует за ведущим.',image:'Земля великодушна и принимает всё; благородный муж несёт бремя мира широкой добродетелью.'},
+{n:3,cn:'屯',py:'чжунь',ru:'Начальная трудность',bin:'010001',fate:'Изначальный успех через стойкость; не следует спешить, полезно обрести помощников.',image:'Тучи и гром — начало всякого дела трудно; благородный муж вносит порядок, пока хаос ещё податлив.'},
+{n:4,cn:'蒙',py:'мэн',ru:'Недоразвитость',bin:'100010',fate:'Успех приходит не к учителю, а к ученику, что ищет искренне; повторный праздный вопрос — уже дерзость.',image:'У подножия горы бьёт источник; благородный муж воспитывает характер решительным действием.'},
+{n:5,cn:'需',py:'сюй',ru:'Ожидание',bin:'010111',fate:'Искренность приносит свет и успех; благоприятно переправиться через великую реку.',image:'Тучи поднимаются к небу — время ожидания; мудрый ест, пьёт и веселится, набираясь сил перед действием.'},
+{n:6,cn:'訟',py:'сун',ru:'Тяжба',bin:'111010',fate:'Искренность встречает препятствие; остановиться на середине пути — к счастью, идти до конца — к несчастью.',image:'Небо и вода расходятся в разные стороны; благородный муж тщательно обдумывает дело прежде, чем начать его.'},
+{n:7,cn:'師',py:'ши',ru:'Войско',bin:'000010',fate:'Стойкость и зрелый предводитель приносят удачу без ошибки.',image:'Посреди земли — вода; благородный муж заботится о народе и множит его силы.'},
+{n:8,cn:'比',py:'би',ru:'Единение',bin:'010000',fate:'Счастье; вопрошай снова о первопричине — изначальная возвышенность и стойкость без порока.',image:'Вода течёт по земле, соединяя всё; правители древности сплачивали уделы дружеским союзом.'},
+{n:9,cn:'小畜',py:'сяочу',ru:'Малое накопление',bin:'110111',fate:'Успех; плотные тучи идут, но дождь ещё не пролился с нашего запада.',image:'Ветер идёт по небу; благородный муж совершенствует свой внутренний облик.'},
+{n:10,cn:'履',py:'люй',ru:'Поступь',bin:'111011',fate:'Наступить на хвост тигра — тот не укусит; успех.',image:'Небо вверху, озеро внизу; благородный муж различает высокое и низкое, утверждая волю народа.'},
+{n:11,cn:'泰',py:'тай',ru:'Расцвет',bin:'000111',fate:'Малое уходит, великое приходит — счастье и успех.',image:'Небо и земля соединяются; правитель сообразует и завершает путь неба и земли.'},
+{n:12,cn:'否',py:'пи',ru:'Упадок',bin:'111000',fate:'Недостойным людям не благоприятствует стойкость благородного мужа; великое уходит, малое приходит.',image:'Небо и земля не сообщаются; благородный муж хранит добродетель в тени, избегая почестей.'},
+{n:13,cn:'同人',py:'тунжэнь',ru:'Единомышленники',bin:'111101',fate:'Единение с людьми на открытом поле — успех; благоприятно переправиться через великую реку.',image:'Небо и огонь вместе; благородный муж различает роды вещей и распознаёт сходства.'},
+{n:14,cn:'大有',py:'даю',ru:'Обладание великим',bin:'101111',fate:'Изначальный, великий успех.',image:'Огонь высоко в небе светит; благородный муж пресекает зло и поощряет добро, следуя небесной воле.'},
+{n:15,cn:'謙',py:'цянь',ru:'Скромность',bin:'000100',fate:'Успех; благородный муж доводит начатое дело до конца.',image:'Гора внутри земли; благородный муж убавляет от избытка и восполняет недостаток, уравнивая вещи.'},
+{n:16,cn:'豫',py:'юй',ru:'Воодушевление',bin:'001000',fate:'Благоприятно поставить помощников и выступить в поход.',image:'Гром выходит из земли с силой; правители древности слагали музыку, чтобы возвеличить добродетель.'},
+{n:17,cn:'隨',py:'суй',ru:'Следование',bin:'011001',fate:'Изначальный успех, польза стойкости, нет вины.',image:'Гром покоится в озере; благородный муж с наступлением темноты удаляется на покой.'},
+{n:18,cn:'蠱',py:'гу',ru:'Исправление порчи',bin:'100110',fate:'Изначальный успех; благоприятно переправиться через великую реку; важны дни до и после начала дела.',image:'У подножия горы дует ветер — порча; благородный муж пробуждает народ, взращивая добродетель.'},
+{n:19,cn:'臨',py:'линь',ru:'Приближение',bin:'000011',fate:'Изначальный успех, польза стойкости; к восьмому месяцу придёт беда.',image:'Земля простирается над озером; благородный муж неистощим в наставлении и заботе о народе.'},
+{n:20,cn:'觀',py:'гуань',ru:'Созерцание',bin:'110000',fate:'Омовение свершено, но жертва ещё не принесена; искренность внушает уважение.',image:'Ветер движется над землёй; правители древности обходили страны, наблюдая народ и наставляя его.'},
+{n:21,cn:'噬嗑',py:'шикэ',ru:'Разгрызание преград',bin:'101001',fate:'Успех; благоприятно применение наказаний.',image:'Гром и молния являются вместе; прежние правители устанавливали законы и разъясняли наказания.'},
+{n:22,cn:'賁',py:'би',ru:'Убранство',bin:'100101',fate:'Успех в малом; благоприятна скромная цель.',image:'Огонь у подножия горы; благородный муж проясняет дела, но не дерзает решать судебные тяжбы.'},
+{n:23,cn:'剝',py:'бо',ru:'Разрушение',bin:'100000',fate:'Неблагоприятно предпринимать что бы то ни было.',image:'Гора покоится на земле; верхи укрепляют своё основание, чтобы дать покой низам.'},
+{n:24,cn:'復',py:'фу',ru:'Возврат',bin:'000001',fate:'Успех; выход и вход без вреда, друзья приходят без порока; путь возвращается через семь дней.',image:'Гром внутри земли; в день солнцестояния правители древности закрывали заставы для покоя.'},
+{n:25,cn:'無妄',py:'уван',ru:'Беспорочность',bin:'111001',fate:'Изначальный успех, польза стойкости; тому, кто отступает от правды, суждена беда.',image:'Гром движется под небом; правители древности заботливо взращивали всё живое, следуя времени.'},
+{n:26,cn:'大畜',py:'дачу',ru:'Великое накопление',bin:'100111',fate:'Польза стойкости; не есть дома — к счастью; благоприятно переправиться через великую реку.',image:'Небо заключено внутри горы; благородный муж познаёт деяния прошлого, питая свою добродетель.'},
+{n:27,cn:'頤',py:'и',ru:'Питание',bin:'100001',fate:'Стойкость к счастью; наблюдай, чем питаешься и что ищешь для наполнения рта.',image:'Гром у подножия горы; благородный муж осторожен в словах и умерен в пище.'},
+{n:28,cn:'大過',py:'дагоо',ru:'Переразвитие великого',bin:'011110',fate:'Балка прогибается под тяжестью; благоприятно иметь куда выступить, успех.',image:'Озеро заливает деревья; благородный муж стоит один без страха и оставляет мир без тоски.'},
+{n:29,cn:'坎',py:'кань',ru:'Бездна',bin:'010010',fate:'Искренность приносит успех сердцу; действие заслуживает уважения.',image:'Вода течёт непрестанно, не останавливаясь; благородный муж хранит верность и учит постоянству.'},
+{n:30,cn:'離',py:'ли',ru:'Сияние',bin:'101101',fate:'Польза стойкости, успех; забота, подобная заботе о корове, приносит счастье.',image:'Свет удваивается; великий человек продолжает его сиянием, озаряя все стороны света.'},
+{n:31,cn:'咸',py:'сянь',ru:'Взаимное влечение',bin:'011100',fate:'Успех, польза стойкости; сватовство к девушке — к счастью.',image:'Гора под озером; благородный муж принимает людей открытым и непредвзятым сердцем.'},
+{n:32,cn:'恆',py:'хэн',ru:'Постоянство',bin:'001110',fate:'Успех, нет вины, полезна стойкость; благоприятно иметь куда выступить.',image:'Гром и ветер неизменно сопутствуют друг другу; благородный муж твёрдо стоит, не меняя направления.'},
+{n:33,cn:'遯',py:'дунь',ru:'Бегство',bin:'111100',fate:'Успех; в малых делах полезна стойкость.',image:'Под небом — гора; благородный муж держится вдали от низкого, не выказывая ни ненависти, ни суровости.'},
+{n:34,cn:'大壯',py:'дачжуан',ru:'Мощь великого',bin:'001111',fate:'Полезна стойкость.',image:'Гром гремит над небом; благородный муж не ступает на путь, что противен установлению.'},
+{n:35,cn:'晉',py:'цзинь',ru:'Восход',bin:'101000',fate:'Сильному князю жалуют коней во множестве, и трижды в течение дня его удостаивают приёма.',image:'Солнце восходит над землёй; благородный муж сам проясняет свою светлую добродетель.'},
+{n:36,cn:'明夷',py:'минъи',ru:'Поражение света',bin:'000101',fate:'В трудности полезна стойкость.',image:'Свет опустился в землю; благородный муж правит массами, скрывая явную ясность и оставаясь мудрым во тьме.'},
+{n:37,cn:'家人',py:'цзяжэнь',ru:'Домашние',bin:'110101',fate:'Благоприятна стойкость женщины.',image:'Ветер исходит из огня; благородный муж утверждает слова содержанием и дела — постоянством.'},
+{n:38,cn:'睽',py:'куй',ru:'Разлад',bin:'101011',fate:'В малых делах — счастье.',image:'Над огнём — озеро; благородный муж среди схожего распознаёт различия.'},
+{n:39,cn:'蹇',py:'цзянь',ru:'Препятствие',bin:'010100',fate:'Благоприятен юго-запад, не благоприятен северо-восток; полезно свидеться с великим человеком, стойкость к счастью.',image:'Вода на горе; благородный муж обращается к себе, совершенствуя собственную добродетель.'},
+{n:40,cn:'解',py:'се',ru:'Освобождение',bin:'001010',fate:'Благоприятен юго-запад; если некуда более идти — возврат приносит счастье; если есть куда идти — раннее выступление к счастью.',image:'Гром и дождь поднимаются; благородный муж прощает проступки и смягчает вину.'},
+{n:41,cn:'損',py:'сунь',ru:'Убыль',bin:'100011',fate:'Искренность приносит изначальное счастье без порока; можно быть стойким.',image:'У подножия горы — озеро; благородный муж сдерживает гнев и умеряет желания.'},
+{n:42,cn:'益',py:'и',ru:'Приумножение',bin:'110001',fate:'Благоприятно иметь куда выступить, благоприятно переправиться через великую реку.',image:'Ветер и гром взаимно усиливают друг друга; благородный муж, видя добро, стремится к нему, а провинившись — исправляется.'},
+{n:43,cn:'夬',py:'гуай',ru:'Решимость',bin:'011111',fate:'Решимость являют открыто при дворе, искренне и с тревогой; предупреди свой город; не выгодно браться за оружие; благоприятно иметь куда выступить.',image:'Озеро поднимается к небу; благородный муж делится благами и остерегается копить добродетель без применения.'},
+{n:44,cn:'姤',py:'гоу',ru:'Перечение',bin:'111110',fate:'Женщина сильна; не стоит брать такую женщину в жёны.',image:'Под небом веет ветер; властитель рассылает указы во все стороны света.'},
+{n:45,cn:'萃',py:'цуй',ru:'Воссоединение',bin:'011000',fate:'Успех; правитель является в храме предков; благоприятно свидеться с великим человеком, стойкость к счастью.',image:'Озеро поднялось над землёй; благородный муж готовит оружие на случай непредвиденного.'},
+{n:46,cn:'升',py:'шэн',ru:'Подъём',bin:'000110',fate:'Изначальный успех; полезно свидеться с великим человеком, не тревожься; поход на юг — к счастью.',image:'Внутри земли растёт дерево; благородный муж следует добродетели, накопляя малое, чтобы достичь высокого.'},
+{n:47,cn:'困',py:'кунь',ru:'Истощение',bin:'011010',fate:'Успех; стойкость великого человека — к счастью, нет вины; но словам его не верят.',image:'В озере нет воды; благородный муж жертвует собой ради исполнения устремлений.'},
+{n:48,cn:'井',py:'цзин',ru:'Колодец',bin:'010110',fate:'Город можно переменить, а колодец — нет; в нём нет ни убыли, ни прибыли, к нему приходят и от него уходят.',image:'Над деревом — вода; благородный муж ободряет народ, побуждая его к взаимопомощи.'},
+{n:49,cn:'革',py:'гэ',ru:'Смена',bin:'011101',fate:'В свой день внушает доверие; изначальный успех, польза стойкости, раскаяние исчезает.',image:'В озере — огонь: обновление; благородный муж упорядочивает календарь, постигая смену времён.'},
+{n:50,cn:'鼎',py:'дин',ru:'Треножник',bin:'101110',fate:'Изначальное счастье, успех.',image:'Огонь над деревом; благородный муж утверждает свою судьбу, делая её устойчивой.'},
+{n:51,cn:'震',py:'чжэнь',ru:'Потрясение',bin:'001001',fate:'Успех; гром приходит — трепет, а вслед за ним смех и радостные слова.',image:'Гром удваивается; благородный муж в страхе и трепете упорядочивает и проверяет себя.'},
+{n:52,cn:'艮',py:'гэнь',ru:'Неподвижность',bin:'100100',fate:'Держать спину в неподвижности, забыть о собственном теле; идти по двору и не видеть людей — нет вины.',image:'Горы стоят одна на другой; благородный муж не выходит мыслью за пределы своего места.'},
+{n:53,cn:'漸',py:'цзянь',ru:'Постепенное развитие',bin:'110100',fate:'Сватовство к девушке — к счастью; полезна стойкость.',image:'На горе растёт дерево; благородный муж пребывает в достойном облике, постепенно улучшая нравы.'},
+{n:54,cn:'歸妹',py:'гуймэй',ru:'Невеста',bin:'001011',fate:'Поход к счастью не приведёт; ни в чём нет пользы.',image:'Гром над озером; благородный муж, видя вечное, прозревает в нём и грядущее разрушение.'},
+{n:55,cn:'豐',py:'фэн',ru:'Изобилие',bin:'001101',fate:'Успех; царю нечего опасаться; будь подобен солнцу в зените.',image:'Гром и молния появляются вместе; благородный муж разрешает тяжбы и приводит в исполнение наказания.'},
+{n:56,cn:'旅',py:'люй',ru:'Странствие',bin:'101100',fate:'Малый успех; стойкость странника — к счастью.',image:'Огонь на горе; благородный муж осмотрительно и осторожно применяет наказания, не затягивая тяжбы.'},
+{n:57,cn:'巽',py:'сюнь',ru:'Проникновение',bin:'110110',fate:'Малый успех; благоприятно иметь куда выступить, благоприятно свидеться с великим человеком.',image:'Ветры следуют друг за другом; благородный муж, вновь и вновь возвещая приказы, приводит дела в исполнение.'},
+{n:58,cn:'兌',py:'дуй',ru:'Радость',bin:'011011',fate:'Успех, полезна стойкость.',image:'Озёра, соединяясь, взаимно питают друг друга; благородный муж с друзьями обсуждает и повторяет заветы.'},
+{n:59,cn:'渙',py:'хуань',ru:'Раздробление',bin:'110010',fate:'Успех; правитель является в храме предков; благоприятно переправиться через великую реку, полезна стойкость.',image:'Ветер движется над водой; правители древности приносили жертвы Верховному владыке и возводили храмы.'},
+{n:60,cn:'節',py:'цзе',ru:'Ограничение',bin:'010011',fate:'Успех; но горькое, чрезмерное ограничение не может оставаться стойким.',image:'Над озером — вода; благородный муж устанавливает меры и числа, обсуждает нормы поведения.'},
+{n:61,cn:'中孚',py:'чжунфу',ru:'Внутренняя правда',bin:'110011',fate:'Даже вепрям и рыбам приносит счастье; благоприятно переправиться через великую реку, полезна стойкость.',image:'Над озером веет ветер; благородный муж не спешит с приговором и медлит с исполнением казни.'},
+{n:62,cn:'小過',py:'сяого',ru:'Переразвитие малого',bin:'001100',fate:'Успех, полезна стойкость; годится для малых дел, но не для великих; пролетающая птица оставляет весть — не стоит подниматься, лучше держаться низко.',image:'Гром на горе; благородный муж в поведении чуть склоняется к почтительности, в трауре — к скорби, в тратах — к бережливости.'},
+{n:63,cn:'既濟',py:'цзицзи',ru:'Уже завершённость',bin:'010101',fate:'Малый успех; полезна стойкость; в начале счастье, в конце — смута.',image:'Вода стоит над огнём; благородный муж помышляет о возможной беде и заранее готовится её предотвратить.'},
+{n:64,cn:'未濟',py:'вэйцзи',ru:'Ещё не завершённость',bin:'101010',fate:'Успех; но лисёнок, почти переправившись, мочит хвост — в этом нет ничего благоприятного.',image:'Огонь стоит над водой; благородный муж осторожно различает вещи, чтобы каждая пребывала на своём месте.'}
+];
+const ICHING_BY_BIN = {};
+ICHING_HEX.forEach(h => ICHING_BY_BIN[h.bin] = h);
+function trigramForBin3(b3){ return ICHING_TRIGRAMS.find(t => t.bin === b3); }
+
+/* ---- FUTHARK: 24 runes (Elder Futhark) ---- */
+const FUTHARK = [
+{id:'fehu',glyph:'ᚠ',ru:'Феху',key:'Скот, богатство, движимое имущество',
+ desc:'Крупный рогатый скот как древняя мера богатства. Символизирует достаток, обретённые ресурсы, начало накопления и материальный успех, добытый собственным трудом.',
+ cats:{love:'начало нового романа, вложение чувств окупится',luck:'удача приходит через то, что вы уже заработали',career:'заслуженное вознаграждение за труд, новый доход',money:'приток денег, хорошее время для накоплений',health:'запас жизненных сил, хорошая база для восстановления'}},
+{id:'uruz',glyph:'ᚢ',ru:'Уруз',key:'Тур, дикая сила, жизненная энергия',
+ desc:'Дикий бык — образ первобытной мощи. Здоровье, физическая сила, выносливость, воля к жизни, преодоление препятствий грубой силой характера.',
+ cats:{love:'страстное, сильное притяжение, физическая энергия чувств',luck:'удача благоволит смелым и напористым',career:'время проявить выносливость и волю к победе',money:'доход через физический труд и упорство',health:'крепкое здоровье, хорошее время для укрепления тела'}},
+{id:'thurisaz',glyph:'ᚦ',ru:'Турисаз',key:'Шип-великан, конфликт и защита',
+ desc:'Шип или великан — двойственная руна. С одной стороны разрушительная, конфликтная сила, с другой — защита и способность нанести точный, необходимый удар.',
+ cats:{love:'конфликт проясняет истинные чувства, будьте осторожны в словах',luck:'резкий поворот, удача требует бдительности',career:'соперничество или столкновение интересов на работе',money:'риск внезапных трат, нужна защита накоплений',health:'предупреждение о перегрузке, важно поберечь силы'}},
+{id:'ansuz',glyph:'ᚨ',ru:'Ансуз',key:'Бог, речь, вдохновение',
+ desc:'Руна бога-провидца (Одина). Речь, общение, мудрость, полученное послание, вдохновение и способность убеждать словом.',
+ cats:{love:'откровенный разговор расставит всё по местам',luck:'важная весть меняет ход событий к лучшему',career:'переговоры и общение приносят успех',money:'полезный совет или инсайдерская информация о доходе',health:'мудрый совет специалиста поможет разобраться в самочувствии'}},
+{id:'raidho',glyph:'ᚱ',ru:'Райдо',key:'Путь, поездка, движение',
+ desc:'Колесо и дорога. Путешествие, движение к цели, ритм жизни, правильный порядок действий и следование выбранному курсу.',
+ cats:{love:'отношения переходят на новый этап, путь вдвоём',luck:'удача в дороге, в переменах и переездах',career:'движение к цели идёт по верному курсу',money:'доходы, связанные с поездками и переменами',health:'полезно движение — прогулки, смена обстановки'}},
+{id:'kenaz',glyph:'ᚲ',ru:'Кеназ',key:'Факел, знание, творческий огонь',
+ desc:'Огонь мастерской и факел. Знание, ремесло, творческое озарение, свет, раскрывающий скрытое, и умение, доведённое до мастерства.',
+ cats:{love:'вспышка вдохновения освещает отношения новым светом',luck:'удача приходит через собственное мастерство и умение',career:'профессиональный рост, раскрытие таланта',money:'доход от знаний, ремесла или творчества',health:'внутренний огонь жизненных сил горит ярко'}},
+{id:'gebo',glyph:'ᚷ',ru:'Гебо',key:'Дар, обмен, партнёрство',
+ desc:'Крест-подарок. Обмен дарами, равновесие «давать и брать», союз, партнёрство, щедрость, которая возвращается сторицей.',
+ cats:{love:'равный обмен чувствами, гармоничный союз партнёров',luck:'удача через взаимовыгодный союз или подарок судьбы',career:'полезное партнёрство приносит плоды',money:'выгодный обмен или совместный проект',health:'баланс тела и духа поддерживает хорошее самочувствие'}},
+{id:'wunjo',glyph:'ᚹ',ru:'Вуньо',key:'Радость, гармония',
+ desc:'Флаг рода на пиру. Радость, удовлетворение, гармония в семье и общине, награда после трудного пути, светлое состояние духа.',
+ cats:{love:'радость и гармония в отношениях, светлый период',luck:'полоса везения и лёгкости',career:'заслуженное признание после трудного пути',money:'приятная прибыль, повод для радости',health:'хорошее самочувствие и душевный подъём'}},
+{id:'hagalaz',glyph:'ᚺ',ru:'Хагалаз',key:'Град, испытание, стихийная сила',
+ desc:'Ледяное зерно града. Разрушительное, неуправляемое событие извне, испытание, которое нельзя предотвратить, но можно пережить и извлечь урок.',
+ cats:{love:'непредвиденное испытание чувств извне',luck:'временная полоса неудач, которую нужно просто пережить',career:'внезапное препятствие требует гибкости',money:'непредвиденные расходы, нужен запас прочности',health:'резкое недомогание — прислушайтесь к телу и отдохните'}},
+{id:'naudiz',glyph:'ᚾ',ru:'Наутиз',key:'Нужда, ограничение, стойкость',
+ desc:'Трение, добывающее огонь. Нужда, стеснённые обстоятельства, необходимость, которая закаляет и учит терпению и стойкости.',
+ cats:{love:'трудности учат ценить отношения по-настоящему',luck:'нужда заставляет искать нестандартный выход',career:'ограниченные ресурсы требуют собранности и терпения',money:'период экономии и осторожных трат',health:'организм требует бережного отношения, не игнорируйте усталость'}},
+{id:'isa',glyph:'ᛁ',ru:'Иса',key:'Лёд, застой, покой',
+ desc:'Единая ледяная черта. Замирание, застой, охлаждение чувств или дел, время остановиться, накопить ясность и переждать.',
+ cats:{love:'охлаждение чувств, пауза перед новым шагом',luck:'время застоя — не форсируйте события',career:'дела замерли, лучше выждать удобный момент',money:'заморозка доходов, не время для рискованных трат',health:'силы на спаде, необходим полноценный отдых'}},
+{id:'jera',glyph:'ᛃ',ru:'Йера',key:'Год, урожай, цикл',
+ desc:'Годовой цикл земледельца. Плоды прежних трудов, справедливое воздаяние, завершение цикла и естественная смена времён.',
+ cats:{love:'отношения приносят плоды долгого доверия',luck:'заслуженная награда приходит в своё время',career:'результаты труда становятся очевидны',money:'доход как итог долгой планомерной работы',health:'постепенное, естественное восстановление сил'}},
+{id:'eihwaz',glyph:'ᛇ',ru:'Эйваз',key:'Тис, ось мира, переход',
+ desc:'Тисовое дерево — связь миров. Стойкость, надёжная опора в трудностях, переход из одного состояния в другое, преодоление страха.',
+ cats:{love:'отношения проходят через важный переходный рубеж',luck:'стойкость перед трудностью принесёт удачу позже',career:'смена курса даётся нелегко, но она необходима',money:'долгосрочные вложения важнее сиюминутной выгоды',health:'организм проходит через важный восстановительный период'}},
+{id:'perthro',glyph:'ᛈ',ru:'Перто',key:'Жребий, тайна, судьба',
+ desc:'Сосуд для жребия. Скрытое, тайна, случай, судьба, которая раскрывается не сразу, игра и то, что лежит вне нашего прямого контроля.',
+ cats:{love:'скрытая тайна или неожиданность в отношениях',luck:'удача — дело случая, доверьтесь ему',career:'исход дела пока не определён, есть элемент риска',money:'непредсказуемый доход, возможна как удача, так и потеря',health:'причина недомогания пока не ясна, нужно обследование'}},
+{id:'algiz',glyph:'ᛉ',ru:'Альгиз',key:'Защита, связь с высшим',
+ desc:'Рога лося или ветви оленя, поднятые вверх. Защита, оберег, связь с высшими силами, бдительность и духовная охрана.',
+ cats:{love:'защита и забота о партнёре выходят на первый план',luck:'высшие силы оберегают от опасности',career:'осторожность убережёт от ошибки на работе',money:'важно защитить накопления от риска',health:'иммунитет и защитные силы организма на высоте'}},
+{id:'sowilo',glyph:'ᛊ',ru:'Совило',key:'Солнце, успех, ясность цели',
+ desc:'Солнечный луч. Победа, успех, жизненная энергия, ясная цель, освещающая путь, и торжество после долгого испытания.',
+ cats:{love:'светлый, вдохновляющий период в отношениях',luck:'явная, яркая удача сопровождает начинания',career:'успех и признание за приложенные усилия',money:'заметный, ощутимый рост дохода',health:'прилив жизненной энергии и хорошего самочувствия'}},
+{id:'tiwaz',glyph:'ᛏ',ru:'Тейваз',key:'Бог Тюр, справедливость, честь',
+ desc:'Копьё бога воинской чести Тюра. Справедливость, готовность к самопожертвованию ради правого дела, дисциплина и воинская доблесть.',
+ cats:{love:'честность и верность — основа крепкого союза',luck:'удача благоволит тем, кто поступает по совести',career:'справедливая оценка труда, возможна конкуренция',money:'доход, заработанный честным путём',health:'воля и дисциплина помогают восстановить форму'}},
+{id:'berkano',glyph:'ᛒ',ru:'Беркана',key:'Берёза, рождение, рост',
+ desc:'Ветвь берёзы. Рождение нового, рост, забота, материнское начало, обновление и плодородие во всех смыслах.',
+ cats:{love:'рождение новых, нежных чувств',luck:'благоприятное время для начала нового',career:'новый проект или должность на старте роста',money:'постепенный, но устойчивый рост дохода',health:'период восстановления и обновления организма'}},
+{id:'ehwaz',glyph:'ᛖ',ru:'Эваз',key:'Конь, доверие, движение вперёд',
+ desc:'Конь и всадник. Слаженное движение вперёд, доверие между партнёрами, постепенный, но верный прогресс.',
+ cats:{love:'доверие и слаженность движут отношения вперёд',luck:'удача приходит через надёжного союзника',career:'постепенный, но верный карьерный прогресс',money:'стабильный доход благодаря партнёрству',health:'постепенное улучшение самочувствия через размеренность'}},
+{id:'mannaz',glyph:'ᛗ',ru:'Манназ',key:'Человек, разум, общество',
+ desc:'Образ человека и рода людского. Разум, самосознание, место человека среди других, социальные связи и взаимопомощь.',
+ cats:{love:'важно услышать и понять партнёра как личность',luck:'удача приходит через поддержку окружающих',career:'ценность работы в команде и взаимопомощи',money:'совместные усилия приносят финансовую пользу',health:'состояние тесно связано с душевным равновесием'}},
+{id:'laguz',glyph:'ᛚ',ru:'Лагуз',key:'Вода, поток, интуиция',
+ desc:'Течение воды. Интуиция, подсознательные силы, эмоциональный поток, способность довериться внутреннему чутью.',
+ cats:{love:'глубокие, интуитивные чувства ведут отношения',luck:'доверьтесь интуиции — она подскажет верный путь',career:'творческий, чувственный подход принесёт пользу делу',money:'доход может прийти неочевидным, «текучим» путём',health:'важно прислушаться к внутренним сигналам тела'}},
+{id:'ingwaz',glyph:'ᛜ',ru:'Ингваз',key:'Бог Инг, завершение, потенциал',
+ desc:'Руна бога плодородия Инга. Накопленный потенциал, готовый раскрыться, завершение подготовительного этапа перед новым рождением.',
+ cats:{love:'отношения подходят к завершению важного этапа перед новым',luck:'накопленный потенциал скоро принесёт плоды',career:'подготовительный этап завершается, скоро будет результат',money:'накопления готовы превратиться в новое вложение',health:'организм накопил ресурс для восстановления'}},
+{id:'dagaz',glyph:'ᛞ',ru:'Дагаз',key:'День, прорыв, преображение',
+ desc:'Рассвет нового дня. Внезапный прорыв, качественное преображение, ясность, приходящая после долгой темноты.',
+ cats:{love:'внезапное прояснение чувств, новый светлый этап',luck:'резкий, благоприятный перелом к лучшему',career:'прорыв в делах после долгого застоя',money:'неожиданный благоприятный поворот в доходах',health:'заметное улучшение самочувствия после трудного периода'}},
+{id:'othala',glyph:'ᛟ',ru:'Отала',key:'Наследие, дом, род',
+ desc:'Родовое поместье. Наследие предков, дом, принадлежность к роду, недвижимое имущество и ценности, передаваемые из поколения в поколение.',
+ cats:{love:'ценности семьи и дома важны для союза',luck:'удача связана с наследием и корнями',career:'опора на проверенный, устойчивый путь',money:'доход, связанный с домом, имуществом или наследством',health:'крепкая основа здоровья, заложенная с детства'}}
+];
+
+/* ---- SLAVIC RUNES (RESY): 18 modern esoteric signs, popular tradition ---- */
+const SLAVIC = [
+{id:'mir',ru:'Мир',key:'Гармония, единство, общность',
+ desc:'Знак равновесия между людьми и мирами. Гармония, согласие, единство противоположностей, мирный договор с собой и окружающими.',
+ cats:{love:'гармония и согласие в паре',luck:'мирное разрешение любых споров судьбы',career:'сотрудничество и согласие в коллективе',money:'стабильность через справедливый раздел благ',health:'душевное равновесие поддерживает и тело'}},
+{id:'chernobog',ru:'Чернобог',key:'Разрушение старого, конец цикла',
+ desc:'Тёмная, разрушительная сторона перемен. Слом отжившего, необходимое завершение старого этапа перед тем, как начнётся новый.',
+ cats:{love:'конец отжившей связи расчищает путь новому',luck:'полоса неудач требует отпустить старое',career:'пора закрыть исчерпавший себя проект',money:'расставание с невыгодным вложением',health:'очищение организма от накопленного напряжения'}},
+{id:'alatyr',ru:'Алатырь',key:'Камень-центр мира, духовная опора',
+ desc:'Мифический камень-основа мироздания. Устойчивость, духовный центр, точка опоры, вокруг которой выстраивается порядок в делах.',
+ cats:{love:'прочная опора и стабильность союза',luck:'удача приходит через внутреннюю устойчивость',career:'надёжный фундамент для дальнейшего роста',money:'стабильный резерв важнее рискованных вложений',health:'крепкая жизненная основа, хороший запас сил'}},
+{id:'raduga',ru:'Радуга',key:'Путь, дорога между состояниями',
+ desc:'Мост между двумя берегами. Движение к цели, дорога, путешествие, переход от одного состояния жизни к другому.',
+ cats:{love:'путь к новым, светлым отношениям',luck:'удача сопровождает перемены и путешествия',career:'переход к новому этапу карьеры',money:'доход, связанный с переменой места или рода занятий',health:'смена обстановки идёт на пользу самочувствию'}},
+{id:'nuzhda',ru:'Нужда',key:'Ограничение, вынужденный урок',
+ desc:'Знак тесных обстоятельств. Ограничение, нехватка, вынужденная необходимость, которая учит терпению и заставляет искать выход.',
+ cats:{love:'трудности испытывают крепость чувств',luck:'вынужденное ограничение — временная мера, не приговор',career:'нехватка ресурсов требует смекалки',money:'период экономии и жёсткого планирования бюджета',health:'организм сигналит о необходимости заботы о себе'}},
+{id:'krada',ru:'Крада',key:'Огонь жертвенника, преображающее пламя',
+ desc:'Костёр обрядового огня. Очищение через трудность, преобразующее пламя, которое сжигает старое ради нового.',
+ cats:{love:'страсть, способная как сжечь, так и очистить отношения',luck:'через трудное испытание приходит новая удача',career:'работа требует полной самоотдачи',money:'вложение сил окупится после трудного этапа',health:'очистительный кризис перед выздоровлением'}},
+{id:'treba',ru:'Треба',key:'Жертва, дар, подношение',
+ desc:'Дар, приносимый ради важной цели. Готовность отдать часть ради целого, обмен с высшими силами, вложение в будущее.',
+ cats:{love:'готовность жертвовать ради партнёра укрепляет союз',luck:'удача приходит в ответ на вложенные усилия',career:'вклад в общее дело вернётся сторицей',money:'разумное вложение сегодня окупится завтра',health:'забота о себе — не роскошь, а необходимость'}},
+{id:'sila',ru:'Сила',key:'Мощь, воля, торжество духа',
+ desc:'Знак внутренней мощи. Воля, стойкость характера, способность преодолеть обстоятельства усилием духа.',
+ cats:{love:'сильный характер помогает отстоять важные отношения',luck:'удача благоволит волевым и решительным',career:'успех через упорство и внутреннюю мощь',money:'доход через собственные усилия и напор',health:'запас жизненных сил велик, но не расходуйте его бездумно'}},
+{id:'veter',ru:'Ветер',key:'Дух, весть, перемены',
+ desc:'Дуновение перемен. Вдохновение, весть издалека, лёгкость и быстрые перемены в жизни, дыхание нового.',
+ cats:{love:'весть или перемена в отношениях грядёт быстро',luck:'лёгкая, быстрая полоса удачи',career:'новые идеи и вдохновение меняют ход дел',money:'доход может прийти неожиданно, издалека',health:'лёгкость и подвижность идут на пользу телу'}},
+{id:'bereginya',ru:'Берегиня',key:'Женское начало, дом, защита рода',
+ desc:'Хранительница очага. Женское начало, забота, дом, защита семьи и рода от внешних невзгод.',
+ cats:{love:'забота и защита партнёра укрепляют дом',luck:'удача хранит домашний очаг от невзгод',career:'поддержка близких помогает в делах',money:'бережливость и забота о накоплениях семьи',health:'забота о себе как о доме своей души'}},
+{id:'ud',ru:'Уд',key:'Мужское начало, плодородие, творчество',
+ desc:'Знак созидающей мужской силы. Плодородие, творческая энергия, начинание нового дела, напор и деятельная воля.',
+ cats:{love:'напористое, деятельное проявление чувств',luck:'удача приходит к тому, кто действует первым',career:'новое начинание требует смелой инициативы',money:'доход через активное новое дело',health:'жизненная, творческая энергия требует выхода'}},
+{id:'lelya',ru:'Леля',key:'Юность, весна, зарождение чувства',
+ desc:'Образ юной весенней богини. Зарождение чувства, лёгкость, весеннее обновление, начало отношений или нового увлечения.',
+ cats:{love:'лёгкое, весеннее чувство, начало романа',luck:'удача улыбается в делах молодых начинаний',career:'свежий, юный взгляд на привычные задачи',money:'небольшой, но приятный доход',health:'обновление и лёгкость в теле'}},
+{id:'rok',ru:'Рок',key:'Судьба, предопределённость',
+ desc:'Знак неотвратимого хода событий. Судьба, предопределённость, то, что нужно принять и прожить, а не пытаться обойти.',
+ cats:{love:'судьбоносная встреча или неотвратимый поворот в отношениях',luck:'происходящее стоит принять, а не бороться с ним',career:'ход событий определён, важно подстроиться',money:'финансовый исход предопределён предыдущими шагами',health:'состояние требует принятия и разумного отношения'}},
+{id:'opora',ru:'Опора',key:'Устойчивость, поддержка, безопасность',
+ desc:'Знак твёрдой основы. Надёжность, устойчивость положения, поддержка близких, чувство безопасности и защищённости.',
+ cats:{love:'надёжность партнёра — главная ценность союза',luck:'удача приходит через прочный тыл и поддержку',career:'стабильное положение — хорошая база для роста',money:'надёжный резерв на случай перемен',health:'крепкое телесное и душевное основание'}},
+{id:'dazhbog',ru:'Даждьбог',key:'Солнечный дар, изобилие',
+ desc:'Солнечное божество-податель благ. Изобилие, заслуженная награда, тепло и щедрость, приходящие в ответ на труд.',
+ cats:{love:'щедрость и тепло в отношениях приносят плоды',luck:'заслуженная удача приходит в награду за труд',career:'признание и щедрое вознаграждение за работу',money:'ощутимый приток средств',health:'тепло и жизненная сила наполняют тело'}},
+{id:'perun',ru:'Перун',key:'Гроза, справедливая сила',
+ desc:'Знак грозового божества-воина. Справедливая сила, воинская защита, решительное вмешательство, наводящее порядок.',
+ cats:{love:'решительное, страстное вмешательство меняет ход отношений',luck:'удача через смелое и справедливое действие',career:'решительный шаг наводит порядок в делах',money:'доход через энергичные, напористые действия',health:'прилив силы, но берегитесь перенапряжения'}},
+{id:'est',ru:'Есть',key:'Бытие, устойчивое настоящее',
+ desc:'Знак самого факта существования. Устойчивое настоящее, то, что уже реально и присутствует, опора на «здесь и сейчас».',
+ cats:{love:'ценность того, что уже есть здесь и сейчас',luck:'устойчивое, спокойное течение дел без потрясений',career:'стабильное положение, не требующее резких перемен',money:'то, что уже есть, — прочная опора',health:'ровное, устойчивое самочувствие'}},
+{id:'istok',ru:'Исток',key:'Начало, источник, корень рода',
+ desc:'Знак истока реки и рода. Начало пути, первопричина, связь с корнями и предками, точка отсчёта нового дела.',
+ cats:{love:'чувство возвращается к своим истокам и первопричине',luck:'удача коренится в том, с чего всё началось',career:'новое дело начинается с чистого листа',money:'доход от нового, только начатого дела',health:'обращение к природным, естественным основам здоровья'}}
+];
+
+const SYSTEMS = {
+  iching:{
+    id:'iching', title:'И-Цзин', short:'И-Цзин', navGlyph:'☰',
+    heroTitle:'<span class="g1">☰</span>И-Цзин — Книга Перемен',
+    heroSub:'Восемь триграмм и 64 гексаграммы древнекитайской системы гадания и философии.',
+    heroNote:'',
+    accent:'#C9A24A', accentBright:'#E7C876',
+    symbols: ICHING_TRIGRAMS,
+    libSub:'Восемь триграмм — базовые знаки И-Цзин, а ниже полная таблица всех 64 гексаграмм. Нажмите на знак, чтобы увидеть толкование по категориям.',
+    talismanSub:'Выберите верхнюю и нижнюю триграммы (можно одну и ту же дважды) — вместе они образуют одну из всех 64 гексаграмм.'
+  },
+  slavic:{
+    id:'slavic', title:'Славянские руны', short:'Слав. руны', navGlyph:'ᛉ',
+    heroTitle:'Славянские руны (резы)',
+    heroSub:'18 символов современной славянской эзотерической традиции.',
+    heroNote:'Это не расшифрованная древняя письменность, а система символов, сложившаяся в популярной эзотерике XX–XXI века. Приведена в распространённой трактовке — для изучения традиции, без претензии на академическую достоверность.',
+    accent:'#B5482E', accentBright:'#E07E5C',
+    symbols: SLAVIC,
+    libSub:'18 знаков-рез. Нажмите на знак, чтобы увидеть толкование по категориям.',
+    talismanSub:'Выберите от 2 до 5 знаков — они соединятся в единую формулу-талисман.'
+  },
+  futhark:{
+    id:'futhark', title:'Старший Футарк', short:'Футарк', navGlyph:'ᚠ',
+    heroTitle:'Старший Футарк',
+    heroSub:'24 руны — историческая система письма и гадания германских народов.',
+    heroNote:'',
+    accent:'#3E7EA8', accentBright:'#6FB4E0',
+    symbols: FUTHARK,
+    libSub:'24 руны Старшего Футарка. Нажмите на руну, чтобы увидеть толкование по категориям.',
+    talismanSub:'Выберите от 2 до 5 рун — они соединятся в вязаную руну (биндруну) вашего талисмана.'
+  }
+};
+
+/* =========================================================================
+   STATE
+   ========================================================================= */
+let currentSys = 'iching';
+let currentTab = 'library';
+let libMode = 'symbols'; // 'symbols' | 'hex' (iching only)
+let pickSelection = [];
+let ichingUpper = null;
+let ichingLower = null;
+let divineCategory = 'love';
+let talismanCategory = 'love';
+let modalCategory = 'love';
+let quizState = {correctId:null, answered:false};
+let quizStats = {iching:{solved:0,correct:0,streak:0,best:0}, slavic:{solved:0,correct:0,streak:0,best:0}, futhark:{solved:0,correct:0,streak:0,best:0}};
+let quizLevel = {iching:1, slavic:1, futhark:1};
+let quizMode = {iching:'trigram'}; // 'trigram' | 'hex'
+const LEVEL_LABELS = {1:'1 · Новичок',2:'2',3:'3',4:'4',5:'5 · Все знаки'};
+function levelPoolSize(total, level){ return Math.max(2, Math.min(total, Math.ceil(total*level/5))); }
+function levelSymbols(s){ const lvl = quizLevel[currentSys] || 1; return s.symbols.slice(0, levelPoolSize(s.symbols.length, lvl)); }
+function levelHexPool(){ const lvl = quizLevel.iching || 1; return ICHING_HEX.slice(0, levelPoolSize(ICHING_HEX.length, lvl)); }
+function isHexQuiz(){ return currentSys === 'iching' && quizMode.iching === 'hex'; }
+function renderQuizModeToggle(){
+  const el = document.getElementById('quizModeToggle');
+  if(currentSys !== 'iching'){ el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  const mode = quizMode.iching;
+  el.innerHTML = `
+    <button data-mode="trigram" class="${mode==='trigram'?'active':''}">Триграммы (8)</button>
+    <button data-mode="hex" class="${mode==='hex'?'active':''}">Все 64 гексаграммы</button>
+  `;
+  Array.from(el.querySelectorAll('button')).forEach(b => {
+    b.addEventListener('click', () => {
+      quizMode.iching = b.dataset.mode;
+      renderQuizModeToggle();
+      renderQuizLevelChips();
+      newQuizQuestion();
+      saveState();
+    });
+  });
+}
+function renderQuizLevelChips(){
+  const s = SYSTEMS[currentSys];
+  const lvl = quizLevel[currentSys] || 1;
+  const el = document.getElementById('quizLevelChips');
+  el.innerHTML = [1,2,3,4,5].map(n => `<button class="cat-chip ${n===lvl?'active':''}" data-lvl="${n}">${LEVEL_LABELS[n]}</button>`).join('');
+  Array.from(el.querySelectorAll('.cat-chip')).forEach(btn => {
+    btn.addEventListener('click', () => {
+      quizLevel[currentSys] = parseInt(btn.dataset.lvl, 10);
+      renderQuizLevelChips();
+      newQuizQuestion();
+      saveState();
+    });
+  });
+  let total, poolSize, word;
+  if(isHexQuiz()){
+    total = ICHING_HEX.length; poolSize = levelPoolSize(total, lvl); word = 'гексаграмм';
+  } else {
+    total = s.symbols.length; poolSize = levelPoolSize(total, lvl);
+    word = s.id === 'futhark' ? 'рун' : (s.id === 'slavic' ? 'знаков' : 'триграмм');
+  }
+  document.getElementById('quizSub').textContent = `Уровень ${lvl} из 5 — в игре ${poolSize} из ${total} ${word}. Прогресс сохраняется автоматически.`;
+}
+let savedTalismans = {iching:[], slavic:[], futhark:[]};
+
+/* =========================================================================
+   NAV / TABS
+   ========================================================================= */
+const sysTabsEl = document.getElementById('sysTabs');
+Object.values(SYSTEMS).forEach(s => {
+  const b = document.createElement('button');
+  b.dataset.sys = s.id;
+  b.innerHTML = `<span class="g">${s.navGlyph}</span>${s.short}`;
+  b.addEventListener('click', () => switchSystem(s.id));
+  sysTabsEl.appendChild(b);
+});
+
+document.querySelectorAll('.subtab-btn').forEach(b => {
+  b.addEventListener('click', () => switchTab(b.dataset.tab));
+});
+
+function switchSystem(id){
+  currentSys = id;
+  libMode = 'symbols';
+  const s = SYSTEMS[id];
+  document.documentElement.style.setProperty('--accent', s.accent);
+  document.documentElement.style.setProperty('--accent-bright', s.accentBright);
+  document.getElementById('heroTitle').innerHTML = s.heroTitle;
+  document.getElementById('heroSub').textContent = s.heroSub;
+  document.getElementById('heroNote').textContent = s.heroNote;
+  document.getElementById('libSub').textContent = s.libSub;
+  document.getElementById('talismanSub').textContent = s.talismanSub;
+  document.getElementById('libToggle').style.display = (id === 'iching') ? 'flex' : 'none';
+  Array.from(document.getElementById('libToggle').children).forEach(b => b.classList.toggle('active', b.dataset.mode === 'symbols'));
+  Array.from(sysTabsEl.children).forEach(b => b.classList.toggle('active', b.dataset.sys === id));
+  pickSelection = [];
+  ichingUpper = null;
+  ichingLower = null;
+  renderAll();
+  saveState();
+}
+function switchTab(tab){
+  currentTab = tab;
+  document.querySelectorAll('.subtab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + tab).classList.add('active');
+  if(tab === 'quiz'){ renderQuizModeToggle(); renderQuizLevelChips(); newQuizQuestion(); }
+  saveState();
+}
+
+document.getElementById('libToggle').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-mode]');
+  if(!btn) return;
+  libMode = btn.dataset.mode;
+  Array.from(document.getElementById('libToggle').children).forEach(b => b.classList.toggle('active', b === btn));
+  renderLibrary();
+});
+
+/* =========================================================================
+   CATEGORY CHIP HELPERS
+   ========================================================================= */
+function renderCatChips(containerId, selectedId, onSelect){
+  const el = document.getElementById(containerId);
+  el.innerHTML = CATEGORIES.map(c => `<button class="cat-chip ${c.id===selectedId?'active':''}" data-cat="${c.id}">${c.icon} ${c.label}</button>`).join('');
+  Array.from(el.querySelectorAll('.cat-chip')).forEach(btn => {
+    btn.addEventListener('click', () => onSelect(btn.dataset.cat));
+  });
+}
+
+/* =========================================================================
+   LIBRARY
+   ========================================================================= */
+function glyphMarkup(sys, sym){
+  if(sys.id === 'slavic'){
+    return `<div class="medallion">${sym.ru[0]}</div>`;
+  }
+  return `<div class="lib-glyph">${sym.glyph}</div>`;
+}
+function modalGlyphMarkup(sys, sym){
+  if(sys.id === 'slavic'){
+    return `<div class="medallion" style="width:64px;height:64px;font-size:24px;margin-bottom:10px;">${sym.ru[0]}</div>`;
+  }
+  return `<div class="mglyph">${sym.glyph}</div>`;
+}
+
+function renderLibrary(){
+  const s = SYSTEMS[currentSys];
+  const grid = document.getElementById('libGrid');
+  if(s.id === 'iching' && libMode === 'hex'){
+    grid.classList.add('hexmode');
+    grid.innerHTML = ICHING_HEX.map(h => `
+      <div class="lib-item" data-hex="${h.n}">
+        <div class="lnum">№ ${h.n}</div>
+        ${hexRenderSmall(h.bin)}
+        <div class="lname">${h.ru}</div>
+      </div>
+    `).join('');
+    Array.from(grid.querySelectorAll('.lib-item')).forEach(el => {
+      el.addEventListener('click', () => openHexModal(parseInt(el.dataset.hex,10)));
+    });
+    return;
+  }
+  grid.classList.remove('hexmode');
+  grid.innerHTML = s.symbols.map(sym => `
+    <div class="lib-item" data-id="${sym.id}">
+      ${glyphMarkup(s, sym)}
+      <div class="lname">${sym.ru}</div>
+      <div class="lkey">${sym.py ? sym.py : ''}</div>
+    </div>
+  `).join('');
+  Array.from(grid.querySelectorAll('.lib-item')).forEach(el => {
+    el.addEventListener('click', () => openModal(el.dataset.id));
+  });
+}
+function hexRenderSmall(bin){
+  let rows = '';
+  for(let i=0;i<6;i++){
+    const cls = bin[i]==='1' ? 'yang' : 'yin';
+    rows += `<div class="hexline ${cls}"><div class="bar"></div></div>`;
+  }
+  return `<div class="hex-render small">${rows}</div>`;
+}
+
+const modalBackdrop = document.getElementById('modalBackdrop');
+document.getElementById('modalClose').addEventListener('click', () => modalBackdrop.classList.remove('open'));
+modalBackdrop.addEventListener('click', e => { if(e.target === modalBackdrop) modalBackdrop.classList.remove('open'); });
+
+function openModal(id){
+  const s = SYSTEMS[currentSys];
+  const sym = s.symbols.find(x => x.id === id);
+  if(!sym) return;
+  modalCategory = 'love';
+  renderSymbolModal(s, sym);
+  modalBackdrop.classList.add('open');
+}
+function renderSymbolModal(s, sym){
+  document.getElementById('modalContent').innerHTML = `
+    ${modalGlyphMarkup(s, sym)}
+    <h3>${sym.ru}${sym.cn ? ' · ' + sym.cn : ''}</h3>
+    <div class="msub">${sym.py ? sym.py : s.title}</div>
+    <div class="keyline">${sym.key}</div>
+    <p>${sym.desc}</p>
+    <div class="cat-chips" id="modalCatChips" style="margin-top:16px;"></div>
+    <div class="cat-block"><span class="lbl">Значение в гадании</span><p id="modalDivText"></p></div>
+    <div class="cat-block"><span class="lbl">Значение в талисмане</span><p id="modalTalText"></p></div>
+  `;
+  renderCatChips('modalCatChips', modalCategory, (catId) => {
+    modalCategory = catId;
+    renderCatChips('modalCatChips', modalCategory, arguments.callee.caller);
+    updateModalCatTexts(sym);
+    renderCatChips('modalCatChips', modalCategory, (c2)=>{ modalCategory=c2; updateModalCatTexts(sym); renderCatChips('modalCatChips', modalCategory, arguments.callee); });
+  });
+  updateModalCatTexts(sym);
+}
+function updateModalCatTexts(sym){
+  document.getElementById('modalDivText').textContent = divText(sym, modalCategory);
+  document.getElementById('modalTalText').textContent = talText(sym, modalCategory);
+}
+function openHexModal(n){
+  const hex = ICHING_HEX.find(h => h.n === n);
+  if(!hex) return;
+  const upperT = trigramForBin3(hex.bin.slice(0,3));
+  const lowerT = trigramForBin3(hex.bin.slice(3,6));
+  modalCategory = 'love';
+  const content = document.getElementById('modalContent');
+  function draw(){
+    content.innerHTML = `
+      <div style="text-align:center;">${hexRenderBig(hex.bin)}</div>
+      <h3 style="margin-top:14px;">№ ${hex.n} · ${hex.ru} · ${hex.cn}</h3>
+      <div class="msub">${upperT.ru} над ${lowerT.ru}</div>
+      <div class="cat-block"><span class="lbl">Суждение</span><p>${hex.fate}</p></div>
+      <div class="cat-block"><span class="lbl">Образ</span><p>${hex.image}</p></div>
+      <div class="cat-chips" id="modalCatChips" style="margin-top:16px;"></div>
+      <div class="cat-block"><span class="lbl">По категории — верхняя триграмма (${upperT.ru})</span><p>${divText(upperT, modalCategory)}</p></div>
+      <div class="cat-block"><span class="lbl">По категории — нижняя триграмма (${lowerT.ru})</span><p>${divText(lowerT, modalCategory)}</p></div>
+    `;
+    renderCatChips('modalCatChips', modalCategory, (catId) => { modalCategory = catId; draw(); });
+  }
+  draw();
+  modalBackdrop.classList.add('open');
+}
+function hexRenderBig(bin){
+  let rows = '';
+  for(let i=0;i<6;i++){
+    const cls = bin[i]==='1' ? 'yang' : 'yin';
+    rows += `<div class="hexline ${cls}"><div class="bar"></div></div>`;
+  }
+  return `<div class="hex-render" style="margin:0 auto;">${rows}</div>`;
+}
+
+/* =========================================================================
+   DIVINATION
+   ========================================================================= */
+function renderDivine(){
+  const s = SYSTEMS[currentSys];
+  document.getElementById('divineSub').textContent = s.id === 'iching'
+    ? 'Выберите категорию вопроса, затем бросьте монеты — по традиционному методу трёх монет строится гексаграмма, черта за чертой.'
+    : 'Выберите категорию вопроса и вытяните один знак или расклад из трёх позиций: прошлое, настоящее, будущее.';
+  renderCatChips('divineCatChips', divineCategory, (catId) => { divineCategory = catId; renderCatChips('divineCatChips', divineCategory, arguments.callee); });
+  const stage = document.getElementById('divineStage');
+  if(s.id === 'iching'){
+    stage.innerHTML = `
+      <div class="coins" id="coinsRow">
+        <div class="coin"><div class="face yang">陽</div><div class="face yin">陰</div></div>
+        <div class="coin"><div class="face yang">陽</div><div class="face yin">陰</div></div>
+        <div class="coin"><div class="face yang">陽</div><div class="face yin">陰</div></div>
+      </div>
+      <button class="btn primary" id="castBtn">Бросить монеты</button>
+      <button class="btn ghost" id="resetCastBtn" style="display:none;">Начать заново</button>
+      <div class="cast-status" id="castStatus">Три монеты бросаются шесть раз — по одной черте снизу вверх.</div>
+      <div class="building-hex" id="buildingHex">
+        <div class="lineplace"></div><div class="lineplace"></div><div class="lineplace"></div>
+        <div class="lineplace"></div><div class="lineplace"></div><div class="lineplace"></div>
+      </div>
+      <p class="method-note">Орёл = 3, решка = 2. Сумма трёх монет: 6 — старая инь (изменяется), 7 — молодой ян, 8 — молодая инь, 9 — старый ян (изменяется).</p>
+      <div id="ichingResult"></div>
+    `;
+    initIChingCast();
+  } else {
+    stage.innerHTML = `
+      <div class="spread-choice">
+        <button class="btn small active" data-spread="1">Один знак</button>
+        <button class="btn small" data-spread="3">Расклад из трёх</button>
+      </div>
+      <button class="btn primary" id="drawBtn">Вытянуть</button>
+      <div id="drawResult"></div>
+    `;
+    let spread = 1;
+    Array.from(stage.querySelectorAll('[data-spread]')).forEach(b => {
+      b.addEventListener('click', () => {
+        stage.querySelectorAll('[data-spread]').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        spread = parseInt(b.dataset.spread, 10);
+      });
+    });
+    document.getElementById('drawBtn').addEventListener('click', () => drawRunes(s, spread));
+  }
+}
+
+function drawRunes(s, count){
+  const pool = s.symbols.slice();
+  const picks = [];
+  const usedIdx = new Set();
+  while(picks.length < count){
+    const idx = Math.floor(Math.random() * pool.length);
+    if(usedIdx.has(idx)) continue;
+    usedIdx.add(idx);
+    const reversed = Math.random() < 0.35;
+    picks.push({sym: pool[idx], reversed});
+  }
+  const labels = count === 3 ? ['Прошлое','Настоящее','Будущее'] : ['Ваш знак'];
+  const html = `<div class="draw-result ${count===3?'cols3':''}">
+    ${picks.map((p,i) => `
+      <div class="draw-card">
+        <div class="draw-pos">${labels[i]}</div>
+        <div class="draw-glyph">${s.id==='slavic' ? `<span class="medallion" style="margin:0 auto;">${p.sym.ru[0]}</span>` : p.sym.glyph}</div>
+        <div class="draw-name">${p.sym.ru}</div>
+        ${p.reversed ? '<div class="draw-rev">перевёрнутое положение — смысл ослаблен или требует переосмысления</div>' : ''}
+        <div class="draw-key">${p.sym.key}</div>
+        <div class="draw-cat">${divText(p.sym, divineCategory)}</div>
+      </div>
+    `).join('')}
+  </div>`;
+  document.getElementById('drawResult').innerHTML = html;
+}
+
+/* ---- I Ching coin casting ---- */
+let lineValues = [];
+let castBusy = false;
+function initIChingCast(){
+  const castBtn = document.getElementById('castBtn');
+  const resetBtn = document.getElementById('resetCastBtn');
+  castBtn.addEventListener('click', runFullCast);
+  resetBtn.addEventListener('click', () => {
+    lineValues = [];
+    document.querySelectorAll('#buildingHex .lineplace').forEach(p => { p.classList.remove('filled'); p.innerHTML=''; });
+    document.getElementById('ichingResult').innerHTML = '';
+    document.getElementById('castStatus').textContent = 'Три монеты бросаются шесть раз — по одной черте снизу вверх.';
+    resetBtn.style.display = 'none';
+  });
+}
+function flipCoinsAnim(){
+  return new Promise(resolve => {
+    const coins = Array.from(document.querySelectorAll('#coinsRow .coin'));
+    const results = [];
+    coins.forEach(coin => {
+      const heads = Math.random() < 0.5;
+      results.push(heads ? 3 : 2);
+      coin.classList.remove('flipped','tails');
+      void coin.offsetWidth;
+      coin.classList.add('flipped');
+      if(!heads) coin.classList.add('tails');
+    });
+    setTimeout(() => resolve(results), 900);
+  });
+}
+function sumToLine(sum){
+  if(sum === 6) return {val:'0', changing:true};
+  if(sum === 7) return {val:'1', changing:false};
+  if(sum === 8) return {val:'0', changing:false};
+  return {val:'1', changing:true};
+}
+async function runFullCast(){
+  if(castBusy) return;
+  castBusy = true;
+  document.getElementById('castBtn').disabled = true;
+  document.getElementById('ichingResult').innerHTML = '';
+  lineValues = [];
+  const places = document.querySelectorAll('#buildingHex .lineplace');
+  places.forEach(p => { p.classList.remove('filled'); p.innerHTML=''; });
+  for(let i=0;i<6;i++){
+    document.getElementById('castStatus').textContent = `Черта ${i+1} из 6…`;
+    const sums = await flipCoinsAnim();
+    const total = sums.reduce((a,b)=>a+b,0);
+    const line = sumToLine(total);
+    lineValues[i] = line;
+    const place = places[i];
+    place.classList.add('filled');
+    const cls = (line.val==='1'?'yang':'yin') + (line.changing?' changing':'');
+    const marker = line.changing ? `<span class="marker">${line.val==='1'?'9':'6'}</span>` : '';
+    place.innerHTML = `<div class="hexline ${cls}"><div class="bar"></div>${marker}</div>`;
+  }
+  document.getElementById('castStatus').textContent = 'Гексаграмма построена.';
+  document.getElementById('castBtn').disabled = false;
+  document.getElementById('resetCastBtn').style.display = 'inline-block';
+  castBusy = false;
+  showIChingResult();
+}
+function hexSVG(bin, changingIdx){
+  let rows = '';
+  for(let i=0;i<6;i++){
+    const val = bin[i];
+    const chg = changingIdx && changingIdx.includes(i);
+    const cls = (val==='1'?'yang':'yin') + (chg?' changing':'');
+    const marker = chg ? `<span class="marker">${val==='1'?'9':'6'}</span>` : '';
+    rows += `<div class="hexline ${cls}"><div class="bar"></div>${marker}</div>`;
+  }
+  return `<div class="hex-render">${rows}</div>`;
+}
+function hexResultCard(hex, changingIdx){
+  const upperT = trigramForBin3(hex.bin.slice(0,3));
+  const lowerT = trigramForBin3(hex.bin.slice(3,6));
+  return `<div class="draw-card">
+    <div class="draw-pos">№ ${hex.n}</div>
+    ${hexSVG(hex.bin, changingIdx)}
+    <div class="draw-name" style="margin-top:10px;">${hex.cn} · ${hex.ru}</div>
+    <div class="draw-key"><b style="color:var(--accent-bright)">Суждение:</b> ${hex.fate}<br><br><b style="color:var(--accent-bright)">Образ:</b> ${hex.image}</div>
+    <div class="draw-cat">${divText(upperT, divineCategory)}<br>${divText(lowerT, divineCategory)}</div>
+  </div>`;
+}
+function showIChingResult(){
+  const bottomToTop = lineValues.map(l => l.val);
+  const topDown = bottomToTop.slice().reverse().join('');
+  const changingBT = lineValues.map(l => l.changing);
+  const changingTD = [];
+  changingBT.forEach((c,i) => { if(c) changingTD.push(5-i); });
+  const primary = ICHING_BY_BIN[topDown];
+  let html = '';
+  if(!primary){
+    html = '<p class="empty-note">Не удалось определить гексаграмму — попробуйте снова.</p>';
+  } else if(changingTD.length === 0){
+    html = `<div class="draw-result cols3" style="grid-template-columns:1fr;max-width:340px;margin:24px auto 0;">${hexResultCard(primary, [])}</div>
+      <p class="method-note">Изменяющихся черт нет — гексаграмма стабильна.</p>`;
+  } else {
+    const transTopDown = topDown.split('').map((v,i) => changingTD.includes(i) ? (v==='1'?'0':'1') : v).join('');
+    const transformed = ICHING_BY_BIN[transTopDown];
+    html = `<div class="draw-result cols3" style="max-width:640px;margin:24px auto 0;">
+      ${hexResultCard(primary, changingTD)}
+      <div class="result-arrow">→</div>
+      ${transformed ? hexResultCard(transformed, []) : ''}
+    </div>
+    <p class="method-note">Изменяющиеся черты превращают первую гексаграмму во вторую — она указывает направление развития ситуации.</p>`;
+  }
+  document.getElementById('ichingResult').innerHTML = html;
+}
+
+/* =========================================================================
+   QUIZ
+   ========================================================================= */
+function updateQuizStatsUI(){
+  const st = quizStats[currentSys];
+  document.getElementById('qs-solved').textContent = st.solved;
+  document.getElementById('qs-acc').textContent = st.solved ? Math.round(st.correct/st.solved*100)+'%' : '0%';
+  document.getElementById('qs-streak').textContent = st.streak;
+  document.getElementById('qs-best').textContent = st.best;
+}
+function hexRenderQuiz(bin){
+  let rows = '';
+  for(let i=0;i<6;i++){
+    const cls = bin[i]==='1' ? 'yang' : 'yin';
+    rows += `<div class="hexline ${cls}"><div class="bar"></div></div>`;
+  }
+  return `<div class="hex-render quiz">${rows}</div>`;
+}
+function newQuizQuestion(){
+  if(isHexQuiz()){ newHexQuizQuestion(); return; }
+  const s = SYSTEMS[currentSys];
+  const pool = levelSymbols(s);
+  const correct = pool[Math.floor(Math.random() * pool.length)];
+  const distractorSource = pool.length >= 4 ? pool : s.symbols;
+  const distractors = distractorSource.filter(x => x.id !== correct.id).sort(() => Math.random()-0.5).slice(0,3);
+  const options = [correct, ...distractors].sort(() => Math.random()-0.5);
+  quizState = {correctId: correct.id, answered: false};
+  const card = document.getElementById('quizCard');
+  card.innerHTML = `
+    <div class="quiz-glyph">${s.id==='slavic' ? `<span class="medallion" style="width:60px;height:60px;font-size:22px;margin:0 auto;">${correct.ru[0]}</span>` : correct.glyph}</div>
+    <div class="quiz-question">Что означает этот знак?</div>
+    <div class="quiz-opts">
+      ${options.map(o => `<button class="qopt" data-id="${o.id}">${o.key}</button>`).join('')}
+    </div>
+    <div class="feedback" id="quizFeedback"></div>
+  `;
+  Array.from(card.querySelectorAll('.qopt')).forEach(btn => {
+    btn.addEventListener('click', () => answerQuiz(btn.dataset.id));
+  });
+  updateQuizStatsUI();
+}
+function newHexQuizQuestion(){
+  const pool = levelHexPool();
+  const correct = pool[Math.floor(Math.random() * pool.length)];
+  const distractorSource = pool.length >= 4 ? pool : ICHING_HEX;
+  const distractors = distractorSource.filter(x => x.n !== correct.n).sort(() => Math.random()-0.5).slice(0,3);
+  const options = [correct, ...distractors].sort(() => Math.random()-0.5);
+  quizState = {correctId: String(correct.n), answered: false};
+  const card = document.getElementById('quizCard');
+  card.innerHTML = `
+    <div class="quiz-glyph">${hexRenderQuiz(correct.bin)}</div>
+    <div class="quiz-question">Какая это гексаграмма?</div>
+    <div class="quiz-opts">
+      ${options.map(o => `<button class="qopt" data-id="${o.n}">№ ${o.n} · ${o.ru}</button>`).join('')}
+    </div>
+    <div class="feedback" id="quizFeedback"></div>
+  `;
+  Array.from(card.querySelectorAll('.qopt')).forEach(btn => {
+    btn.addEventListener('click', () => answerQuiz(btn.dataset.id));
+  });
+  updateQuizStatsUI();
+}
+function answerQuiz(chosenId){
+  if(quizState.answered) return;
+  quizState.answered = true;
+  const ok = chosenId === quizState.correctId;
+  const st = quizStats[currentSys];
+  st.solved++;
+  if(ok){ st.correct++; st.streak++; st.best = Math.max(st.best, st.streak); }
+  else { st.streak = 0; }
+  updateQuizStatsUI();
+  saveState();
+  const fb = document.getElementById('quizFeedback');
+  Array.from(document.querySelectorAll('.qopt')).forEach(btn => {
+    btn.disabled = true;
+    if(btn.dataset.id === quizState.correctId) btn.classList.add('correct');
+    else if(btn.dataset.id === chosenId) btn.classList.add('wrong');
+  });
+  fb.textContent = ok ? 'Верно!' : 'Неверно.';
+  fb.className = 'feedback ' + (ok ? 'ok' : 'err');
+  setTimeout(newQuizQuestion, ok ? 900 : 1900);
+}
+
+/* =========================================================================
+   TALISMAN BUILDER
+   ========================================================================= */
+function renderTalismanPick(){
+  const s = SYSTEMS[currentSys];
+  renderCatChips('talismanCatChips', talismanCategory, (catId) => { talismanCategory = catId; renderCatChips('talismanCatChips', talismanCategory, arguments.callee); renderCombo(); });
+  const grid = document.getElementById('pickGrid');
+
+  if(s.id === 'iching'){
+    grid.innerHTML = `
+      <div class="trigram-slot-row">
+        <div class="slot-title">Верхняя триграмма</div>
+        <div class="pick-grid inner">
+          ${ICHING_TRIGRAMS.map(t => `<div class="pick-item ${ichingUpper===t.id?'sel':''}" data-slot="upper" data-id="${t.id}"><div class="g">${t.glyph}</div><div class="n">${t.ru}</div></div>`).join('')}
+        </div>
+      </div>
+      <div class="trigram-slot-row">
+        <div class="slot-title">Нижняя триграмма</div>
+        <div class="pick-grid inner">
+          ${ICHING_TRIGRAMS.map(t => `<div class="pick-item ${ichingLower===t.id?'sel':''}" data-slot="lower" data-id="${t.id}"><div class="g">${t.glyph}</div><div class="n">${t.ru}</div></div>`).join('')}
+        </div>
+      </div>
+    `;
+    Array.from(grid.querySelectorAll('.pick-item')).forEach(el => {
+      el.addEventListener('click', () => {
+        const slot = el.dataset.slot, id = el.dataset.id;
+        if(slot === 'upper') ichingUpper = (ichingUpper === id) ? null : id;
+        else ichingLower = (ichingLower === id) ? null : id;
+        renderTalismanPick();
+      });
+    });
+    renderCombo();
+    return;
+  }
+
+  grid.innerHTML = s.symbols.map(sym => `
+    <div class="pick-item ${pickSelection.includes(sym.id)?'sel':''}" data-id="${sym.id}">
+      <div class="g">${s.id==='slavic' ? sym.ru[0] : sym.glyph}</div>
+      <div class="n">${sym.ru}</div>
+    </div>
+  `).join('');
+  Array.from(grid.querySelectorAll('.pick-item')).forEach(el => {
+    el.addEventListener('click', () => togglePick(el.dataset.id));
+  });
+  renderCombo();
+}
+function togglePick(id){
+  const s = SYSTEMS[currentSys];
+  const maxN = 5;
+  const idx = pickSelection.indexOf(id);
+  if(idx >= 0){ pickSelection.splice(idx,1); }
+  else {
+    if(pickSelection.length >= maxN){ renderTalismanPick(); return; }
+    pickSelection.push(id);
+  }
+  renderTalismanPick();
+}
+document.getElementById('clearPickBtn').addEventListener('click', () => {
+  pickSelection = [];
+  ichingUpper = null;
+  ichingLower = null;
+  renderTalismanPick();
+});
+
+function renderCombo(){
+  const s = SYSTEMS[currentSys];
+  const box = document.getElementById('comboBox');
+  const list = document.getElementById('chosenList');
+
+  if(s.id === 'iching'){
+    if(!ichingUpper || !ichingLower){
+      box.innerHTML = '<span style="color:var(--text-3);font-size:12px;">выберите верхнюю и нижнюю триграммы</span>';
+      list.innerHTML = '';
+      return;
+    }
+    const up = ICHING_TRIGRAMS.find(t => t.id === ichingUpper);
+    const low = ICHING_TRIGRAMS.find(t => t.id === ichingLower);
+    const fullBin = up.bin + low.bin;
+    const hex = ICHING_BY_BIN[fullBin];
+    box.innerHTML = hexSVG(fullBin, []);
+    box.style.display = 'flex'; box.style.alignItems='center'; box.style.justifyContent='center';
+    let out = `<div class="cline"><b>${up.ru} + ${low.ru}</b> образуют гексаграмму${hex ? ' № '+hex.n+' «'+hex.ru+'» ('+hex.cn+')' : ''}.</div>`;
+    if(hex) out += `<div class="cline">${hex.fate}</div>`;
+    out += `<div class="cline">${talText(up, talismanCategory)}</div>`;
+    out += `<div class="cline">${talText(low, talismanCategory)}</div>`;
+    list.innerHTML = out;
+    return;
+  }
+
+  const chosen = pickSelection.map(id => s.symbols.find(x => x.id === id)).filter(Boolean);
+  if(chosen.length === 0){
+    box.innerHTML = '<span style="color:var(--text-3);font-size:12px;">выберите знаки ниже</span>';
+    list.innerHTML = '';
+    return;
+  }
+
+  // generic overlay combo for runes / slavic
+  box.innerHTML = chosen.map((sym, i) => {
+    const rot = (i - (chosen.length-1)/2) * 14;
+    const scale = 1 - i*0.06;
+    const opacity = 1 - i*0.12;
+    const g = s.id === 'slavic' ? sym.ru[0] : sym.glyph;
+    return `<div class="combo-glyph" style="font-size:${64*scale}px;transform:translate(-50%,-50%) rotate(${rot}deg) scale(${scale});opacity:${Math.max(opacity,0.35)};z-index:${10-i};">${g}</div>`;
+  }).join('');
+  list.innerHTML = chosen.map(c => `<div class="cline">${talText(c, talismanCategory)}</div>`).join('');
+}
+
+document.getElementById('saveTalismanBtn').addEventListener('click', () => {
+  const s = SYSTEMS[currentSys];
+  const cat = catById(talismanCategory);
+  let chosen, glyphStr;
+  if(s.id === 'iching'){
+    if(!ichingUpper || !ichingLower){
+      alert('Выберите верхнюю и нижнюю триграммы.');
+      return;
+    }
+    const up = ICHING_TRIGRAMS.find(t => t.id === ichingUpper);
+    const low = ICHING_TRIGRAMS.find(t => t.id === ichingLower);
+    chosen = [up, low];
+    glyphStr = up.glyph + ' ' + low.glyph;
+  } else {
+    if(pickSelection.length < 2){
+      alert('Выберите хотя бы два знака.');
+      return;
+    }
+    chosen = pickSelection.map(id => s.symbols.find(x => x.id === id)).filter(Boolean);
+    glyphStr = s.id === 'slavic' ? chosen.map(c=>c.ru[0]).join(' ') : chosen.map(c=>c.glyph).join(' ');
+  }
+  const nameInput = document.getElementById('talismanNameInput');
+  const name = nameInput.value.trim() || ('Талисман на ' + cat.acc);
+  savedTalismans[currentSys].unshift({
+    name, glyph: glyphStr, symbols: chosen.map(c=>c.ru), category: cat.label, date: new Date().toLocaleDateString('ru-RU')
+  });
+  nameInput.value = '';
+  pickSelection = [];
+  ichingUpper = null;
+  ichingLower = null;
+  renderTalismanPick();
+  renderSavedList();
+  saveState();
+});
+
+function renderSavedList(){
+  const list = savedTalismans[currentSys];
+  const el = document.getElementById('savedList');
+  if(!list.length){
+    el.innerHTML = '<div class="empty-note">Сохранённых талисманов пока нет.</div>';
+    return;
+  }
+  el.innerHTML = list.map((t, i) => `
+    <div class="saved-item">
+      <div>
+        <div class="sg">${t.glyph}</div>
+        <div class="sn">${t.name}</div>
+        <div class="sd">${t.symbols.join(' + ')} · ${t.category ? t.category + ' · ' : ''}${t.date}</div>
+      </div>
+      <button data-i="${i}" title="Удалить">✕</button>
+    </div>
+  `).join('');
+  Array.from(el.querySelectorAll('button[data-i]')).forEach(b => {
+    b.addEventListener('click', () => {
+      savedTalismans[currentSys].splice(parseInt(b.dataset.i,10), 1);
+      renderSavedList();
+      saveState();
+    });
+  });
+}
+
+/* =========================================================================
+   RENDER ALL / INIT
+   ========================================================================= */
+function renderAll(){
+  renderLibrary();
+  renderDivine();
+  renderQuizModeToggle();
+  renderQuizLevelChips();
+  updateQuizStatsUI();
+  newQuizQuestion();
+  renderTalismanPick();
+  renderSavedList();
+}
+
+function copyAddr(btn, text){
+  const orig = btn.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Скопировано';
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  }).catch(() => {});
+}
+
+/* =========================================================================
+   PERSISTENCE
+   ========================================================================= */
+async function saveState(){
+  try{
+    await window.storage.set('symbols-oracle-state', JSON.stringify({
+      currentSys, currentTab, quizStats, quizLevel, quizMode, savedTalismans
+    }));
+  }catch(e){}
+}
+async function loadState(){
+  try{
+    const res = await window.storage.get('symbols-oracle-state');
+    if(res && res.value){
+      const d = JSON.parse(res.value);
+      if(d.quizStats) quizStats = Object.assign(quizStats, d.quizStats);
+      if(d.quizLevel) quizLevel = Object.assign(quizLevel, d.quizLevel);
+      if(d.quizMode) quizMode = Object.assign(quizMode, d.quizMode);
+      if(d.savedTalismans) savedTalismans = Object.assign(savedTalismans, d.savedTalismans);
+      if(d.currentSys) currentSys = d.currentSys;
+      if(d.currentTab) currentTab = d.currentTab;
+    }
+  }catch(e){}
+  switchSystem(currentSys);
+  switchTab(currentTab);
+}
+
+loadState();
+</script>
+</body>
+</html>
